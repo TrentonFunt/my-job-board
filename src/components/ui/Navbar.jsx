@@ -1,13 +1,11 @@
-import React from "react";
-import Button from "./Button";
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { useAuth } from "../../context/useAuth";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 
 export default function Navbar() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  console.log('Navbar user:', user, 'loading:', loading);
 
   const handleSignOut = async () => {
     await auth.signOut();
@@ -15,36 +13,74 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-base-100 shadow-lg sticky top-0 z-50 border-b border-base-200">
-      <div className="container mx-auto flex items-center py-3 px-4 md:px-8">
+    <nav className="navbar bg-base-100 shadow-lg sticky top-0 z-50 border-b border-base-200">
+      <div className="container mx-auto flex items-center justify-between py-3 px-4 md:px-8">
         {/* Logo / Name */}
-        <a href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-bold text-accent tracking-tight">JobBoard</span>
-        </a>
+        </Link>
 
-        {/* Links */}
-        <div className="hidden md:flex gap-6 text-base-content font-medium">
-          <a href="/" className="hover:text-accent transition-colors duration-150">Home</a>
-          <a href="#jobs" className="hover:text-accent transition-colors duration-150">Jobs</a>
-          <a href="#about" className="hover:text-accent transition-colors duration-150">About</a>
-          <a href="/account" className="hover:text-accent transition-colors duration-150">Account</a>
-          {!loading && !user && (
-            <a href="/signup" className="hover:text-accent transition-colors duration-150">Sign Up</a>
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link to="/" className="btn btn-ghost rounded-btn text-base font-medium">Home</Link>
+          <Link to="#jobs" className="btn btn-ghost rounded-btn text-base font-medium">Jobs</Link>
+          <Link to="#about" className="btn btn-ghost rounded-btn text-base font-medium">About</Link>
+          <Link to="/account" className="btn btn-ghost rounded-btn text-base font-medium">Account</Link>
+          {!user && (
+            <Link to="/signup" className="btn btn-primary rounded-btn text-base font-semibold ml-2">Sign Up</Link>
           )}
           {!loading && user && (
-            <button className="btn btn-outline btn-sm" onClick={handleSignOut}>Sign Out</button>
+            <button className="btn btn-outline btn-error rounded-btn text-base font-semibold ml-2" onClick={handleSignOut}>Sign Out</button>
           )}
         </div>
 
-        {/* Mobile menu button */}
-        <div className="md:hidden">
-          <label className="btn btn-ghost btn-circle">
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          </label>
+        {/* Mobile Menu */}
+        <div className="md:hidden flex items-center">
+          <Menu as="div" className="relative inline-block text-left">
+            <MenuButton className="btn btn-ghost btn-circle">
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </MenuButton>
+            <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-base-100 border border-base-200 rounded-box shadow-lg focus:outline-none z-50">
+              <div className="py-2 flex flex-col gap-1">
+                <MenuItem>
+                  {({ focus }) => (
+                    <Link to="/" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Home</Link>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <Link to="#jobs" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Jobs</Link>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <Link to="#about" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>About</Link>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <Link to="/account" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Account</Link>
+                  )}
+                </MenuItem>
+                {!user && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <Link to="/signup" className={`btn btn-primary w-full justify-start ${focus ? 'bg-primary/80' : ''}`}>Sign Up</Link>
+                    )}
+                  </MenuItem>
+                )}
+                {!loading && user && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button className={`btn btn-outline btn-error w-full justify-start ${focus ? 'bg-error/10' : ''}`} onClick={handleSignOut}>Sign Out</button>
+                    )}
+                  </MenuItem>
+                )}
+              </div>
+            </MenuItems>
+          </Menu>
         </div>
       </div>
-      {/* Mobile menu (hidden by default, can be toggled with state if needed) */}
-      {/* ...existing code... */}
     </nav>
   );
 }

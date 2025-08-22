@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import DOMPurify from "dompurify";
+import Spinner from "../components/ui/Spinner";
 
 export default function JobDetailPage() {
   const { slug } = useParams();
@@ -18,7 +19,7 @@ export default function JobDetailPage() {
     fetchJobs();
   }, [slug]);
 
-  if (!job) return <p className="text-center mt-10">Loading...</p>;
+  if (!job) return <Spinner className="mt-10" />;
   if (!job) return <p className="text-center mt-10">Job not found.</p>;
 
   // Sanitize and render HTML job description
@@ -53,7 +54,7 @@ export default function JobDetailPage() {
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-6">
           <div>
             <h1 className="text-3xl font-bold text-accent mb-1">{job.title}</h1>
             <p className="text-base-content/70 font-medium mb-1">{job.company_name}</p>
@@ -68,13 +69,13 @@ export default function JobDetailPage() {
               </div>
             )}
           </div>
-          <div className="flex gap-2 items-center mt-2 md:mt-0">
-            <Button className="btn-outline" onClick={() => navigate(-1)}>
-              ← Back
+          <div className="flex flex-col gap-4 mt-4 md:mt-0 w-full max-w-xs mx-auto">
+            <Button className="btn btn-outline btn-accent w-full" onClick={() => navigate(-1)}>
+              &larr; Back
             </Button>
             {job.url && (
-              <a href={job.url} target="_blank" rel="noopener noreferrer">
-                <Button className="btn-accent">Apply Now</Button>
+              <a href={job.url} target="_blank" rel="noopener noreferrer" className="w-full">
+                <Button className="btn btn-accent w-full">Apply Now</Button>
               </a>
             )}
           </div>

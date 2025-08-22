@@ -15,6 +15,7 @@
     "@tailwindcss/vite": "^4.1.12",
     "axios": "^1.11.0",
     "daisyui": "^5.0.50",
+    "dayjs": "^1.11.13",
     "dompurify": "^3.2.6",
     "firebase": "^12.1.0",
     "react": "^19.1.1",

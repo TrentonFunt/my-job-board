@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { auth, db } from "../firebase";
+import Spinner from "../components/ui/Spinner";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
@@ -58,82 +59,84 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 card bg-base-100 p-8 shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="text"
-          placeholder="First Name"
-          className="input input-bordered w-full mb-2"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          className="input input-bordered w-full mb-2"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="input input-bordered w-full mb-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <div className="relative mb-2">
+    <div className="max-w-3xl mx-auto p-8">
+      <div className="card bg-base-100 shadow-xl border border-base-300 p-8 mb-8">
+        <h2 className="text-4xl font-bold text-accent mb-6">Sign Up</h2>
+        <form onSubmit={handleSignUp}>
           <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password (min 8 chars)"
-            className="input input-bordered w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="text"
+            placeholder="First Name"
+            className="input input-bordered w-full mb-2"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
           />
-          <button
-            type="button"
-            className="absolute right-2 top-2 btn btn-xs btn-ghost"
-            onClick={() => setShowPassword((show) => !show)}
-            tabIndex={-1}
-          >
-            {showPassword ? "Hide" : "Show"}
+          <input
+            type="text"
+            placeholder="Last Name"
+            className="input input-bordered w-full mb-2"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="input input-bordered w-full mb-2"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className="relative mb-2">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password (min 8 chars)"
+              className="input input-bordered w-full"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-2 btn btn-xs btn-ghost"
+              onClick={() => setShowPassword((show) => !show)}
+              tabIndex={-1}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            className={`input input-bordered w-full mb-2 ${!passwordsMatch && confirmPassword ? 'input-error' : ''}`}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          {!passwordsMatch && confirmPassword && (
+            <p className="text-error text-sm mb-2">Passwords do not match.</p>
+          )}
+          <input
+            type="text"
+            placeholder="Role (e.g. Job Seeker, Recruiter)"
+            className="input input-bordered w-full mb-4"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          />
+          <button className="btn btn-accent w-full" type="submit" disabled={loading || !passwordsMatch}>
+            {loading ? <Spinner className="w-6 h-6" /> : "Sign Up"}
           </button>
-        </div>
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Confirm Password"
-          className={`input input-bordered w-full mb-2 ${!passwordsMatch && confirmPassword ? 'input-error' : ''}`}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-        {!passwordsMatch && confirmPassword && (
-          <p className="text-error text-sm mb-2">Passwords do not match.</p>
-        )}
-        <input
-          type="text"
-          placeholder="Role (e.g. Job Seeker, Recruiter)"
-          className="input input-bordered w-full mb-4"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        />
-        <button className="btn btn-accent w-full" type="submit" disabled={loading || !passwordsMatch}>
-          {loading ? "Signing Up..." : "Sign Up"}
+          {error && <p className="text-error text-sm mt-2">{error}</p>}
+          {success && <p className="text-success text-sm mt-2">{success}</p>}
+        </form>
+        <button
+          className="btn btn-outline btn-accent w-full mt-4"
+          type="button"
+          onClick={() => navigate('/auth')}
+        >
+          Already have an account? Sign In
         </button>
-        {error && <p className="text-error text-sm mt-2">{error}</p>}
-        {success && <p className="text-success text-sm mt-2">{success}</p>}
-      </form>
-      <button
-        className="btn btn-outline w-full mt-4"
-        type="button"
-        onClick={() => navigate('/auth')}
-      >
-        Already have an account? Sign In
-      </button>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
+import { db, auth } from "../firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import JobCard from "../components/ui/JobCard";
 import SearchAndFilterBar from "../components/ui/SearchAndFilter";
+import Spinner from "../components/ui/Spinner";
+import UserProfileSummary from "../components/ui/UserProfileSummary";
+import RecentSearchesSidebarContainer from "../components/ui/RecentSearchesSidebarContainer";
 
 
 export default function HomePage() {
@@ -99,7 +104,7 @@ export default function HomePage() {
 
 	const handleFilter = useCallback((f) => setFilters((prev) => ({ ...prev, ...f })), []);
 
-	if (loading) return <p className="text-center mt-10">Loading jobs...</p>;
+	if (loading) return <Spinner className="mt-10" />;
 	if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
 	// Pagination calculations
@@ -109,17 +114,46 @@ export default function HomePage() {
 	const endIdx = startIdx + jobsPerPage;
 	const jobsToShow = filteredJobs.slice(startIdx, endIdx);
 
-	return (
-		<div className="p-6 max-w-3xl mx-auto">
-			<SearchAndFilterBar
-				onSearch={(val) => setFilters((f) => ({ ...f, search: val }))}
-				onFilter={handleFilter}
-				tagOptions={tagOptions}
-				companyOptions={companyOptions}
-				locationOptions={locationOptions}
-			/>
 
-			<div className="grid gap-4">
+	// Save search term to Firestore
+	const handleSearchWithSave = async (val) => {
+		setFilters((f) => ({ ...f, search: val }));
+		const user = auth.currentUser;
+		if (user && val.trim()) {
+			try {
+				const searchesRef = collection(db, "users", user.uid, "recentSearches");
+				await addDoc(searchesRef, {
+					term: val,
+					timestamp: serverTimestamp(),
+				});
+			} catch {
+				// Optionally handle error
+			}
+		}
+	};
+
+	return (
+		<div className="w-full px-4 py-8">
+			<UserProfileSummary />
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-8 w-full">
+				{/* Main job search and recent searches side by side */}
+				<div className="md:col-span-8 lg:col-span-9">
+					<div className="card bg-base-100 shadow-xl border border-base-300 p-8 mb-8">
+						<h1 className="text-4xl font-bold text-accent mb-6">Find Your Next Job</h1>
+						<SearchAndFilterBar
+							onSearch={handleSearchWithSave}
+							onFilter={handleFilter}
+							tagOptions={tagOptions}
+							companyOptions={companyOptions}
+							locationOptions={locationOptions}
+						/>
+					</div>
+				</div>
+				<aside className="hidden md:block md:col-span-4 lg:col-span-3">
+					<RecentSearchesSidebarContainer />
+				</aside>
+			</div>
+			<div className="grid gap-6 mt-8">
 				{jobsToShow.length > 0 ? (
 					jobsToShow.map((job) => (
 						<JobCard
@@ -131,15 +165,14 @@ export default function HomePage() {
 						/>
 					))
 				) : (
-					<p className="text-center mt-10 text-gray-500">No jobs found.</p>
+					<p className="text-center mt-10 text-base-content/70">No jobs found.</p>
 				)}
 			</div>
-
 			{/* Pagination controls */}
 			{totalPages > 1 && (
 				<div className="flex justify-center items-center gap-2 mt-8">
 					<button
-						className="btn btn-sm btn-outline"
+						className="btn btn-sm btn-outline btn-accent"
 						onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
 						disabled={currentPage === 1}
 					>
@@ -148,14 +181,14 @@ export default function HomePage() {
 					{Array.from({ length: totalPages }, (_, i) => (
 						<button
 							key={i + 1}
-							className={`btn btn-sm ${currentPage === i + 1 ? "btn-primary" : "btn-outline"}`}
+							className={`btn btn-sm ${currentPage === i + 1 ? "btn-accent" : "btn-outline btn-accent"}`}
 							onClick={() => setCurrentPage(i + 1)}
 						>
 							{i + 1}
 						</button>
 					))}
 					<button
-						className="btn btn-sm btn-outline"
+						className="btn btn-sm btn-outline btn-accent"
 						onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
 						disabled={currentPage === totalPages}
 					>
