@@ -38,12 +38,12 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8">
-      <div className="card bg-base-100 shadow-xl border border-base-300 p-8 mb-8">
-        <h2 className="text-4xl font-bold text-accent mb-6">Account</h2>
+    <div className="max-w-3xl mx-auto p-4 sm:p-8">
+      <div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
+        <h2 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Account</h2>
         {user ? (
           <div>
-            <p className="mb-4">Signed in as <span className="font-bold">{user.email}</span></p>
+            <p className="mb-2 sm:mb-4">Signed in as <span className="font-bold">{user.email}</span></p>
             <button className="btn btn-error w-full" onClick={handleSignOut}>Sign Out</button>
           </div>
         ) : (
@@ -56,7 +56,7 @@ export default function AuthPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <div className="relative mb-4">
+            <div className="relative mb-2 sm:mb-4">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -74,11 +74,11 @@ export default function AuthPage() {
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            <div className="flex gap-2 mb-2">
-              <button className="btn btn-accent w-1/2" onClick={handleSignIn}>
+            <div className="flex flex-col sm:flex-row gap-2 mb-2">
+              <button className="btn btn-accent w-full sm:w-1/2" onClick={handleSignIn}>
                 {loading ? <Spinner className="w-6 h-6" /> : "Sign In"}
               </button>
-              <a href="/signup" className="btn btn-outline btn-accent w-1/2 text-center">Sign Up</a>
+              <a href="/signup" className="btn btn-outline btn-accent w-full sm:w-1/2 text-center">Sign Up</a>
             </div>
             {error && <p className="text-error text-sm mt-2">{error}</p>}
           </form>

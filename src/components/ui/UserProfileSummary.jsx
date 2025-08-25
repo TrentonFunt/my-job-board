@@ -20,7 +20,7 @@ export default function UserProfileSummary() {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center text-center">
-        <div className="font-bold text-lg text-accent">Welcome, {user.displayName || user.email}!</div>
+  <div className="font-bold text-lg text-accent">Welcome, {user.displayName ? user.displayName : user.email}!</div>
         <div className="text-base-content/70 text-sm">Glad to see you back. Explore new jobs below!</div>
       </div>
     </div>

@@ -133,13 +133,13 @@ export default function HomePage() {
 	};
 
 	return (
-		<div className="w-full px-4 py-8">
+		<div className="w-full px-2 sm:px-4 py-4 sm:py-8">
 			<UserProfileSummary />
-			<div className="grid grid-cols-1 md:grid-cols-12 gap-8 w-full">
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-8 w-full">
 				{/* Main job search and recent searches side by side */}
 				<div className="md:col-span-8 lg:col-span-9">
-					<div className="card bg-base-100 shadow-xl border border-base-300 p-8 mb-8">
-						<h1 className="text-4xl font-bold text-accent mb-6">Find Your Next Job</h1>
+					<div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
+						<h1 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Find Your Next Job</h1>
 						<SearchAndFilterBar
 							onSearch={handleSearchWithSave}
 							onFilter={handleFilter}
@@ -149,11 +149,11 @@ export default function HomePage() {
 						/>
 					</div>
 				</div>
-				<aside className="hidden md:block md:col-span-4 lg:col-span-3">
+				<aside className="block w-full mb-4 md:mb-0 md:col-span-4 lg:col-span-3">
 					<RecentSearchesSidebarContainer />
 				</aside>
 			</div>
-			<div className="grid gap-6 mt-8">
+			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-8">
 				{jobsToShow.length > 0 ? (
 					jobsToShow.map((job) => (
 						<JobCard
@@ -170,9 +170,9 @@ export default function HomePage() {
 			</div>
 			{/* Pagination controls */}
 			{totalPages > 1 && (
-				<div className="flex justify-center items-center gap-2 mt-8">
+				<div className="flex flex-wrap justify-center items-center gap-2 mt-4 sm:mt-8">
 					<button
-						className="btn btn-sm btn-outline btn-accent"
+						className="btn btn-xs sm:btn-sm btn-outline btn-accent"
 						onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
 						disabled={currentPage === 1}
 					>
@@ -181,14 +181,14 @@ export default function HomePage() {
 					{Array.from({ length: totalPages }, (_, i) => (
 						<button
 							key={i + 1}
-							className={`btn btn-sm ${currentPage === i + 1 ? "btn-accent" : "btn-outline btn-accent"}`}
+							className={`btn btn-xs sm:btn-sm ${currentPage === i + 1 ? "btn-accent" : "btn-outline btn-accent"}`}
 							onClick={() => setCurrentPage(i + 1)}
 						>
 							{i + 1}
 						</button>
 					))}
 					<button
-						className="btn btn-sm btn-outline btn-accent"
+						className="btn btn-xs sm:btn-sm btn-outline btn-accent"
 						onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
 						disabled={currentPage === totalPages}
 					>

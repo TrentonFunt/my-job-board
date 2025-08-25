@@ -47,6 +47,13 @@ export default function EditProfileModal({
           try {
             const user = auth.currentUser;
             if (user) {
+              // Update displayName in Firebase Auth independently
+              if (editForm.displayName && user.displayName !== editForm.displayName) {
+                const { updateProfile } = await import("firebase/auth");
+                await updateProfile(user, {
+                  displayName: editForm.displayName
+                });
+              }
               await updateUserData(editForm);
             }
           } catch {
@@ -59,25 +66,24 @@ export default function EditProfileModal({
         <div className="grid grid-cols-2 gap-4">
           <input
             type="text"
+            id="displayName"
+            name="displayName"
+            placeholder="Display Name"
+            className="input input-bordered w-full mb-2 col-span-2"
+            value={editForm.displayName || ""}
+            onChange={(e) =>
+              setEditForm((f) => ({ ...f, displayName: e.target.value }))
+            }
+          />
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
             placeholder="First Name"
             className="input input-bordered w-full mb-2"
             value={editForm.firstName}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, firstName: e.target.value }))
-            }
-          />
-          {formErrors.firstName && (
-            <span className="text-error col-span-2">
-              {formErrors.firstName}
-            </span>
-          )}
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="input input-bordered w-full mb-2"
-            value={editForm.lastName}
-            onChange={(e) =>
-              setEditForm((f) => ({ ...f, lastName: e.target.value }))
             }
           />
           {formErrors.lastName && (
@@ -87,6 +93,8 @@ export default function EditProfileModal({
           )}
           <input
             type="email"
+            id="email"
+            name="email"
             placeholder="Email"
             className="input input-bordered w-full mb-2 col-span-2"
             value={editForm.email}
@@ -101,6 +109,8 @@ export default function EditProfileModal({
           )}
           <input
             type="text"
+            id="phone"
+            name="phone"
             placeholder="Phone"
             className="input input-bordered w-full mb-2 col-span-2"
             value={editForm.phone}
@@ -110,6 +120,8 @@ export default function EditProfileModal({
           />
           <input
             type="text"
+            id="address"
+            name="address"
             placeholder="Address"
             className="input input-bordered w-full mb-2 col-span-2"
             value={editForm.address}
@@ -118,6 +130,8 @@ export default function EditProfileModal({
             }
           />
           <textarea
+            id="bio"
+            name="bio"
             placeholder="Bio"
             className="textarea textarea-bordered w-full mb-2 col-span-2"
             value={editForm.bio}
@@ -160,6 +174,8 @@ export default function EditProfileModal({
             <>
               <input
                 type="url"
+                id="twitter"
+                name="twitter"
                 placeholder="Twitter URL"
                 className="input input-bordered w-full mb-2"
                 value={editForm.twitter}
@@ -178,6 +194,8 @@ export default function EditProfileModal({
             <>
               <input
                 type="url"
+                id="linkedin"
+                name="linkedin"
                 placeholder="LinkedIn URL"
                 className="input input-bordered w-full mb-2"
                 value={editForm.linkedin}

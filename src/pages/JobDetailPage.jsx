@@ -35,14 +35,14 @@ export default function JobDetailPage() {
           // If it's a heading, render with extra margin
           if (/<h2[^>]*>.*?<\/h2>/i.test(part)) {
             return (
-              <div key={idx} className="mt-8 mb-2">
+              <div key={idx} className="mt-6 sm:mt-8 mb-2">
                 <div dangerouslySetInnerHTML={{ __html: part }} />
               </div>
             );
           }
           // Otherwise, wrap the section content in a card-like div for separation
           return (
-            <div key={idx} className="mb-8 p-4 bg-base-200 rounded-box shadow-sm">
+            <div key={idx} className="mb-4 sm:mb-8 p-2 sm:p-4 bg-base-200 rounded-box shadow-sm">
               <div dangerouslySetInnerHTML={{ __html: part }} />
             </div>
           );
@@ -52,11 +52,11 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
-        <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-6">
+    <div className="p-3 sm:p-6 max-w-3xl mx-auto">
+      <div className="card bg-base-100 shadow-xl border border-base-300 p-3 sm:p-6">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-3 sm:mb-4 gap-4 sm:gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-accent mb-1">{job.title}</h1>
+            <h1 className="text-xl sm:text-3xl font-bold text-accent mb-1">{job.title}</h1>
             <p className="text-base-content/70 font-medium mb-1">{job.company_name}</p>
             {job.location && (
               <span className="badge badge-outline badge-lg mr-2 mb-2">{job.location}</span>
@@ -69,7 +69,7 @@ export default function JobDetailPage() {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-4 mt-4 md:mt-0 w-full max-w-xs mx-auto">
+          <div className="flex flex-col gap-2 sm:gap-4 mt-2 sm:mt-4 md:mt-0 w-full max-w-xs mx-auto">
             <Button className="btn btn-outline btn-accent w-full" onClick={() => navigate(-1)}>
               &larr; Back
             </Button>
@@ -81,7 +81,7 @@ export default function JobDetailPage() {
           </div>
         </div>
         <div className="divider"></div>
-  {renderDescription(job.description)}
+        {renderDescription(job.description)}
       </div>
     </div>
   );

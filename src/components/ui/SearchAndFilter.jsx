@@ -27,6 +27,8 @@ export default function SearchAndFilterBar({ onSearch, onFilter, tagOptions = []
 			{/* Search input */}
 			<input
 				type="text"
+				id="searchTerm"
+				name="searchTerm"
 				placeholder="Search jobs..."
 				value={searchTerm}
 				onChange={handleSearch}
@@ -130,6 +132,8 @@ export default function SearchAndFilterBar({ onSearch, onFilter, tagOptions = []
 				{/* Salary range input */}
 				<input
 					type="number"
+					id="salary"
+					name="salary"
 					min="0"
 					placeholder="Min Salary (€)"
 					value={salary}

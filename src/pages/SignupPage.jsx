@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { auth, db } from "../firebase";
 import Spinner from "../components/ui/Spinner";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
 
@@ -42,6 +42,9 @@ export default function SignupPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: `${firstName} ${lastName}`
+      });
       await setDoc(doc(db, "users", user.uid), {
         email,
         firstName,
@@ -59,9 +62,9 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8">
-      <div className="card bg-base-100 shadow-xl border border-base-300 p-8 mb-8">
-        <h2 className="text-4xl font-bold text-accent mb-6">Sign Up</h2>
+    <div className="max-w-3xl mx-auto p-4 sm:p-8">
+      <div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
+        <h2 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Sign Up</h2>
         <form onSubmit={handleSignUp}>
           <input
             type="text"
@@ -119,7 +122,7 @@ export default function SignupPage() {
           <input
             type="text"
             placeholder="Role (e.g. Job Seeker, Recruiter)"
-            className="input input-bordered w-full mb-4"
+            className="input input-bordered w-full mb-2 sm:mb-4"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           />
@@ -130,7 +133,7 @@ export default function SignupPage() {
           {success && <p className="text-success text-sm mt-2">{success}</p>}
         </form>
         <button
-          className="btn btn-outline btn-accent w-full mt-4"
+          className="btn btn-outline btn-accent w-full mt-2 sm:mt-4"
           type="button"
           onClick={() => navigate('/auth')}
         >
