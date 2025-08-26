@@ -2,11 +2,11 @@ export default function Footer() {
   return (
     <footer className="bg-base-200 text-base-content py-8 mt-12 border-t border-base-300">
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
-        {/* About Section */}
-        <div className="flex flex-col items-center sm:items-start gap-3">
-          <span className="text-xl font-bold text-accent tracking-tight">JobBoard</span>
+  {/* About Section */}
+  <div className="flex flex-col items-center sm:items-start gap-3 sm:pl-8">
+          <span className="text-xl font-bold text-accent tracking-tight">Role Rocket</span>
           <p className="text-sm opacity-80 max-w-xs text-center sm:text-left">
-            JobBoard helps you find your next opportunity with curated listings, smart filters, and a modern, user-friendly experience.
+            Role Rocket helps you find your next opportunity with curated listings, smart filters, and a modern, user-friendly experience.
           </p>
           {/* Social Links */}
           <div className="flex gap-4 mt-2">
@@ -37,7 +37,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="container mx-auto text-center mt-8 text-xs opacity-70">
-  &copy; {new Date().getFullYear()} <span className="font-bold text-accent">JobBoard</span>. All rights reserved.
+  &copy; {new Date().getFullYear()} <span className="font-bold text-accent">Role Rocket</span>. All rights reserved.
       </div>
     </footer>
   );

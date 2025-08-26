@@ -1,10 +1,12 @@
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { useAuth } from "../../context/useAuth";
+import useAdminStatus from "../../hooks/useAdminStatus";
 import { auth } from "../../firebase";
 import { useNavigate, Link } from "react-router";
 
 export default function Navbar() {
   const { user, loading } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminStatus();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -17,7 +19,7 @@ export default function Navbar() {
       <div className="container mx-auto flex items-center justify-between py-3 px-2 sm:px-4 md:px-8">
         {/* Logo / Name */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-accent tracking-tight">JobBoard</span>
+          <span className="text-2xl font-bold text-accent tracking-tight">Role Rocket</span>
         </Link>
 
         {/* Desktop Links */}
@@ -25,6 +27,9 @@ export default function Navbar() {
           <Link to="/" className="btn btn-ghost rounded-btn text-base font-medium">Home</Link>
           <Link to="/about" className="btn btn-ghost rounded-btn text-base font-medium">About</Link>
           <Link to="/account" className="btn btn-ghost rounded-btn text-base font-medium">Account</Link>
+          {isAdmin && !adminLoading && (
+            <Link to="/admin/jobs" className="btn btn-ghost rounded-btn text-base font-medium">Admin</Link>
+          )}
           {!user && (
             <Link to="/signup" className="btn btn-primary rounded-btn text-base font-semibold ml-2">Sign Up</Link>
           )}
@@ -56,6 +61,13 @@ export default function Navbar() {
                     <Link to="/account" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Account</Link>
                   )}
                 </MenuItem>
+                {isAdmin && !adminLoading && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <Link to="/admin/jobs" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Admin</Link>
+                    )}
+                  </MenuItem>
+                )}
                 {!user && (
                   <MenuItem>
                     {({ focus }) => (

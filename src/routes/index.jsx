@@ -5,6 +5,7 @@ import AuthPage from "../pages/AuthPage";
 import SignupPage from "../pages/SignupPage";
 import AccountPage from "../pages/AccountPage";
 import AboutPage from "../pages/AboutPage";
+import AdminJobsPanel from "../components/admin/AdminJobsPanel";
 import { createBrowserRouter } from "react-router";
 
 
@@ -36,6 +37,10 @@ export const routes = createBrowserRouter([
       {
         path: "about",
         element: <AboutPage />
+      },
+      {
+        path: "admin/jobs",
+        element: <AdminJobsPanel />
       }
     ]
   }

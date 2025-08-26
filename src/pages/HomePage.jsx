@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { db, auth } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore";
 import JobCard from "../components/ui/JobCard";
 import SearchAndFilterBar from "../components/ui/SearchAndFilter";
 import Spinner from "../components/ui/Spinner";
 import UserProfileSummary from "../components/ui/UserProfileSummary";
+import BlogHighlights from "../components/ui/BlogHighlights";
 import RecentSearchesSidebarContainer from "../components/ui/RecentSearchesSidebarContainer";
+import FeaturedJobs from "../components/ui/FeaturedJobs";
 
 
 export default function HomePage() {
@@ -31,13 +33,20 @@ export default function HomePage() {
 	useEffect(() => {
 		async function fetchJobs() {
 			try {
+				// Fetch jobs from API
 				const res = await fetch(
 					"https://corsproxy.io/?https://arbeitnow.com/api/job-board-api"
 				);
 				if (!res.ok) throw new Error("Failed to fetch jobs");
-				const data = await res.json();
-				setJobs(data.data);
-				setFilteredJobs(data.data);
+				const apiData = await res.json();
+				// Fetch jobs from Firestore
+				const jobsCol = collection(db, "jobs");
+				const jobsSnap = await getDocs(jobsCol);
+				const firestoreJobs = jobsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+				// Merge both sources
+				const mergedJobs = [...apiData.data, ...firestoreJobs];
+				setJobs(mergedJobs);
+				setFilteredJobs(mergedJobs);
 			} catch (err) {
 				setError(err.message);
 			} finally {
@@ -153,6 +162,7 @@ export default function HomePage() {
 					<RecentSearchesSidebarContainer />
 				</aside>
 			</div>
+			<FeaturedJobs jobs={jobs} />
 			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-8">
 				{jobsToShow.length > 0 ? (
 					jobsToShow.map((job) => (
@@ -196,6 +206,7 @@ export default function HomePage() {
 					</button>
 				</div>
 			)}
+			<BlogHighlights />
 		</div>
-	);
+		);
 }
