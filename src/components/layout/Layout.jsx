@@ -1,4 +1,4 @@
-import Navbar from "../ui/Navbar";
+import Navbar from "./NavBar";
 import { Outlet, useLocation, Navigate } from "react-router";
 import Footer from "./Footer";
 import { useAuth } from "../../context/useAuth";

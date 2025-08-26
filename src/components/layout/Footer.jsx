@@ -37,7 +37,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="container mx-auto text-center mt-8 text-xs opacity-70">
-        &copy; {new Date().getFullYear()} <span className="font-bold text-accent">JobBoard</span>. All rights reserved.
+  &copy; {new Date().getFullYear()} <span className="font-bold text-accent">JobBoard</span>. All rights reserved.
       </div>
     </footer>
   );

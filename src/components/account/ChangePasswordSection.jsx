@@ -44,6 +44,8 @@ export default function ChangePasswordSection() {
       
         <input
           type="password"
+          id="current-password"
+          name="currentPassword"
           placeholder="Current Password"
           className="input input-bordered"
           value={currentPassword}
@@ -51,6 +53,8 @@ export default function ChangePasswordSection() {
         />
         <input
           type="password"
+          id="new-password"
+          name="newPassword"
           placeholder="New Password"
           className="input input-bordered"
           value={newPassword}
@@ -59,6 +63,8 @@ export default function ChangePasswordSection() {
         />
         <input
           type="password"
+          id="confirm-password"
+          name="confirmPassword"
           placeholder="Confirm New Password"
           className="input input-bordered"
           value={confirmPassword}
