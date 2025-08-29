@@ -12,7 +12,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [role, setRole] = useState("");
+  const [profession, setProfession] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,7 @@ export default function SignupPage() {
         email,
         firstName,
         lastName,
-        role,
+        profession,
         createdAt: new Date().toISOString(),
       });
       setSuccess("Registration successful! Redirecting...");
@@ -73,6 +73,7 @@ export default function SignupPage() {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
+            autoComplete="given-name"
           />
           <input
             type="text"
@@ -81,6 +82,7 @@ export default function SignupPage() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
+            autoComplete="family-name"
           />
           <input
             type="email"
@@ -89,6 +91,7 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
           />
           <div className="relative mb-2">
             <input
@@ -98,6 +101,7 @@ export default function SignupPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="new-password"
             />
             <button
               type="button"
@@ -115,16 +119,18 @@ export default function SignupPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            autoComplete="new-password"
           />
           {!passwordsMatch && confirmPassword && (
             <p className="text-error text-sm mb-2">Passwords do not match.</p>
           )}
           <input
             type="text"
-            placeholder="Role (e.g. Job Seeker, Recruiter)"
+            placeholder="Profession (e.g. Software Engineer, Recruiter)"
             className="input input-bordered w-full mb-2 sm:mb-4"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+            value={profession}
+            onChange={(e) => setProfession(e.target.value)}
+            autoComplete="organization-title"
           />
           <button className="btn btn-accent w-full" type="submit" disabled={loading || !passwordsMatch}>
             {loading ? <Spinner className="w-6 h-6" /> : "Sign Up"}

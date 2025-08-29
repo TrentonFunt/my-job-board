@@ -66,6 +66,17 @@ export default function EditProfileModal({
         <div className="grid grid-cols-2 gap-4">
           <input
             type="text"
+            id="profession"
+            name="profession"
+            placeholder="Profession (e.g. Software Engineer, Recruiter)"
+            className="input input-bordered w-full mb-2 col-span-2"
+            value={editForm.profession || ""}
+            onChange={(e) =>
+              setEditForm((f) => ({ ...f, profession: e.target.value }))
+            }
+          />
+          <input
+            type="text"
             id="displayName"
             name="displayName"
             placeholder="Display Name"

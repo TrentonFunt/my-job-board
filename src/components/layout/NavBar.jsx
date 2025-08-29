@@ -28,7 +28,7 @@ export default function Navbar() {
           <Link to="/about" className="btn btn-ghost rounded-btn text-base font-medium">About</Link>
           <Link to="/account" className="btn btn-ghost rounded-btn text-base font-medium">Account</Link>
           {isAdmin && !adminLoading && (
-            <Link to="/admin/jobs" className="btn btn-ghost rounded-btn text-base font-medium">Admin</Link>
+            <Link to="/admin" className="btn btn-ghost rounded-btn text-base font-medium">Admin</Link>
           )}
           {!user && (
             <Link to="/signup" className="btn btn-primary rounded-btn text-base font-semibold ml-2">Sign Up</Link>
@@ -64,7 +64,7 @@ export default function Navbar() {
                 {isAdmin && !adminLoading && (
                   <MenuItem>
                     {({ focus }) => (
-                      <Link to="/admin/jobs" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Admin</Link>
+                      <Link to="/admin" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Admin</Link>
                     )}
                   </MenuItem>
                 )}

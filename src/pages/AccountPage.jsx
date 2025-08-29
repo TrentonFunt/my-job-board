@@ -15,16 +15,17 @@ export default function AccountPage() {
 	const [editOpen, setEditOpen] = useState(false);
 	const [avatarPreview, setAvatarPreview] = useState(null);
 	const [editForm, setEditForm] = useState({
-		firstName: "",
-		lastName: "",
-		email: "",
-		phone: "",
-		address: "",
-		bio: "",
-		twitter: "",
-		linkedin: "",
-		showTwitter: true,
-		showLinkedin: true,
+	firstName: "",
+	lastName: "",
+	email: "",
+	phone: "",
+	address: "",
+	bio: "",
+	profession: "",
+	twitter: "",
+	linkedin: "",
+	showTwitter: true,
+	showLinkedin: true,
 	});
 	const [formErrors, setFormErrors] = useState({});
 	const [status, setStatus] = useState("active");
@@ -65,6 +66,7 @@ export default function AccountPage() {
 				phone: userData.phone || "",
 				address: userData.address || "",
 				bio: userData.bio || "",
+				profession: userData.profession || "",
 				twitter: userData.twitter || "",
 				linkedin: userData.linkedin || "",
 				showTwitter: true,
@@ -131,12 +133,14 @@ export default function AccountPage() {
 								phone: form.phone,
 								address: form.address,
 								bio: form.bio,
+								profession: form.profession,
 								twitter: form.showTwitter ? form.twitter : "",
 								linkedin: form.showLinkedin ? form.linkedin : "",
 							});
 							setUserData((prev) => ({
 								...prev,
 								...form,
+								profession: form.profession,
 								twitter: form.showTwitter ? form.twitter : "",
 								linkedin: form.showLinkedin ? form.linkedin : "",
 							}));

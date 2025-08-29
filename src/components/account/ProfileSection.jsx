@@ -47,7 +47,7 @@ export default function ProfileSection({
           <span className={`badge badge-sm ${status === "active" ? "badge-success" : "badge-warning"}`}>{status}</span>
         </h2>
         <span className="badge badge-outline badge-lg mb-2">
-          {userData?.role || "User"}
+          {userData?.profession || "Profession not set"}
         </span>
         <span className="text-base-content/70 mb-4">{userData?.email}</span>
         <div className="divider my-2" />
