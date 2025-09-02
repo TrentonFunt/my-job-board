@@ -2,12 +2,13 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { useAuth } from "../../context/useAuth";
 import useAdminStatus from "../../hooks/useAdminStatus";
 import { auth } from "../../firebase";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useLocation } from "react-router";
 
-export default function Navbar() {
+export default function Navbar({ sidebarOpen, setSidebarOpen }) {
   const { user, loading } = useAuth();
   const { isAdmin, loading: adminLoading } = useAdminStatus();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     await auth.signOut();
@@ -17,10 +18,27 @@ export default function Navbar() {
   return (
     <nav className="navbar w-full bg-base-100 shadow-lg sticky top-0 z-50 border-b border-base-200">
       <div className="container mx-auto flex items-center justify-between py-3 px-2 sm:px-4 md:px-8">
-        {/* Logo / Name */}
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-accent tracking-tight">Role Rocket</span>
-        </Link>
+        {/* Logo / Name and sidebar toggle */}
+        <div className="flex items-center gap-2 h-12">
+          {/* Sidebar toggle only on /account and mobile */}
+          {location.pathname === "/account" && (
+            <button
+              className="md:hidden btn btn-ghost btn-circle flex items-center justify-center h-12"
+              aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              style={{ alignSelf: 'center' }}
+            >
+              {sidebarOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              )}
+            </button>
+          )}
+          <Link to="/" className="flex items-center h-12">
+            <span className="text-2xl font-bold text-accent tracking-tight flex items-center h-12">Role Rocket</span>
+          </Link>
+        </div>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-4">
@@ -39,9 +57,9 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden flex items-center">
-          <Menu as="div" className="relative inline-block text-left">
-            <MenuButton className="btn btn-ghost btn-circle">
+        <div className="md:hidden flex items-center h-12">
+          <Menu as="div" className="relative inline-block text-left h-12 flex items-center">
+            <MenuButton className="btn btn-ghost btn-circle flex items-center justify-center h-12">
               <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
             </MenuButton>
             <MenuItems className="absolute right-0 mt-2 w-48 origin-top-right bg-base-100 border border-base-200 rounded-box shadow-lg focus:outline-none z-50 p-2">

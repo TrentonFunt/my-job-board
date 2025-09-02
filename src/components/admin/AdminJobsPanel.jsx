@@ -357,14 +357,17 @@ export default function AdminJobsPanel() {
       ) : (
         <>
           {role === "admin" && (
-            <AdminJobsBulkActions
-              selectedJobIds={selectedJobIds}
-              onDeleteSelected={() => setShowBulkDeleteModal(true)}
-              onFeatureSelected={handleFeatureSelected}
-              onUnfeatureSelected={handleUnfeatureSelected}
-              deleting={deleting}
-              updating={updating}
-            />
+            <>
+              <h3 className="text-lg font-semibold mb-2">Bulk Actions</h3>
+              <AdminJobsBulkActions
+                selectedJobIds={selectedJobIds}
+                onDeleteSelected={() => setShowBulkDeleteModal(true)}
+                onFeatureSelected={handleFeatureSelected}
+                onUnfeatureSelected={handleUnfeatureSelected}
+                deleting={deleting}
+                updating={updating}
+              />
+            </>
           )}
           <AdminJobsPagination
             currentPage={currentPage}

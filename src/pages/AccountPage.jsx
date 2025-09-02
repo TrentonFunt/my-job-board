@@ -7,6 +7,7 @@ import ProfileSection from "../components/account/ProfileSection";
 import EditProfileModal from "../components/account/EditProfileModal";
 import SuccessAlert from "../components/ui/SuccessAlert";
 import Spinner from "../components/ui/Spinner";
+import AccountSidebar from "../components/account/AccountSidebar";
 
 export default function AccountPage() {
 	const [userData, setUserData] = useState(null);
@@ -15,23 +16,25 @@ export default function AccountPage() {
 	const [editOpen, setEditOpen] = useState(false);
 	const [avatarPreview, setAvatarPreview] = useState(null);
 	const [editForm, setEditForm] = useState({
-	firstName: "",
-	lastName: "",
-	email: "",
-	phone: "",
-	address: "",
-	bio: "",
-	profession: "",
-	twitter: "",
-	linkedin: "",
-	showTwitter: true,
-	showLinkedin: true,
+		firstName: "",
+		lastName: "",
+		email: "",
+		phone: "",
+		address: "",
+		bio: "",
+		profession: "",
+		twitter: "",
+		linkedin: "",
+		showTwitter: true,
+		showLinkedin: true,
 	});
 	const [formErrors, setFormErrors] = useState({});
 	const [status, setStatus] = useState("active");
 	const [showSuccess, setShowSuccess] = useState(false);
 	const avatarInputRef = useRef();
 	const navigate = useNavigate();
+	const [activeSection, setActiveSection] = useState("profile");
+	const [sidebarOpen, setSidebarOpen] = useState(false);
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -82,23 +85,34 @@ export default function AccountPage() {
 		navigate("/auth");
 	};
 
-	if (loading)
-		return <Spinner className="mt-10" />;
+	if (loading) return <Spinner className="mt-10" />;
 	if (error) return <div className="text-error text-center mt-10">{error}</div>;
 
-		return (
-			<div className="max-w-3xl mx-auto p-4 sm:p-8">
-				<div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
-					<h1 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Account</h1>
-					{/* Success Alert */}
-					<SuccessAlert message="Profile saved successfully!" show={showSuccess} />
+	return (
+		<div className="flex min-h-screen bg-base-200">
+			<AccountSidebar
+				userData={userData}
+				avatarPreview={avatarPreview}
+				activeSection={activeSection}
+				setActiveSection={setActiveSection}
+				open={sidebarOpen}
+				setOpen={setSidebarOpen}
+			/>
+			<main className="flex-1 p-4 sm:p-8 relative">
+				{/* Heading for Account */}
+				<div className="md:block mb-4">
+					<h1 className="text-2xl sm:text-4xl font-bold text-accent">
+						Account
+					</h1>
+				</div>
+				<SuccessAlert message="Profile saved successfully!" show={showSuccess} />
+				{activeSection === "profile" && (
 					<ProfileSection
 						avatarPreview={avatarPreview}
 						avatarInputRef={avatarInputRef}
 						onAvatarChange={(e) => {
 							const file = e.target.files[0];
 							if (file) {
-								// Show preview immediately (local only)
 								const reader = new FileReader();
 								reader.onload = (ev) => setAvatarPreview(ev.target.result);
 								reader.readAsDataURL(file);
@@ -109,10 +123,20 @@ export default function AccountPage() {
 						handleEdit={() => setEditOpen(true)}
 						handleSignOut={handleSignOut}
 					/>
-					{/* Change Password Section */}
-					<ChangePasswordSection />
-				</div>
-				{/* Edit Profile Modal */}
+				)}
+				{activeSection === "password" && <ChangePasswordSection />}
+				{activeSection === "saved" && (
+					<div className="card bg-base-100 shadow-xl border border-base-300 p-4 mb-8">
+						<h2 className="text-lg font-bold mb-2">Saved Jobs</h2>
+						<p className="text-base-content/70">(Feature coming soon)</p>
+					</div>
+				)}
+				{activeSection === "settings" && (
+					<div className="card bg-base-100 shadow-xl border border-base-300 p-4 mb-8">
+						<h2 className="text-lg font-bold mb-2">Settings</h2>
+						<p className="text-base-content/70">(Feature coming soon)</p>
+					</div>
+				)}
 				<EditProfileModal
 					editOpen={editOpen}
 					editForm={editForm}
@@ -149,6 +173,7 @@ export default function AccountPage() {
 						}
 					}}
 				/>
-			</div>
-		);
+			</main>
+		</div>
+	);
 }

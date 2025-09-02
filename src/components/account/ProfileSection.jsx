@@ -14,7 +14,7 @@ export default function ProfileSection({
     <div className="card bg-base-100 shadow-xl p-0 overflow-hidden">
       <div className="flex flex-col items-center py-8 px-6">
         {/* Avatar */}
-        <div className="avatar mb-4 relative">
+        <div className="avatar mb-4 relative flex items-center justify-center">
           {avatarPreview ? (
             <img
               src={avatarPreview}
@@ -23,16 +23,16 @@ export default function ProfileSection({
             />
           ) : (
             <div className="w-20 h-20 rounded-full bg-primary text-base-100 flex items-center justify-center text-3xl font-bold">
-              {userData?.firstName?.[0] || "U"}
-              {userData?.lastName?.[0] || "N"}
+              <span className="flex items-center justify-center w-full h-full">{userData?.firstName?.[0] || "U"}{userData?.lastName?.[0] || "N"}</span>
             </div>
           )}
           <button
-            className="btn btn-xs btn-ghost absolute bottom-0 right-0"
+            className="btn btn-xs btn-circle btn-ghost absolute bottom-0 right-0 flex items-center justify-center"
             onClick={() => avatarInputRef.current?.click()}
             title="Change Avatar"
+            aria-label="Edit Avatar"
           >
-            <span className="material-icons">edit</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-2.828 1.172H7v-2a4 4 0 011.172-2.828z" /></svg>
           </button>
           <input
             type="file"
