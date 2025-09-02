@@ -1,4 +1,4 @@
-# My Job Board
+# Role Rocket
 
 A modern, full-featured job board web application built with React, Vite, DaisyUI, Headless UI, Tailwind CSS, and Firebase.
 
