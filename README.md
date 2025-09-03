@@ -16,8 +16,6 @@ A modern, full-featured job board web application built with React, Vite, DaisyU
 
 ### Admin Panel Features (NEW)
 
-#### Admin Panel Features (NEW)
-
 - **Admin Dashboard**: Sidebar navigation for User Management, Jobs Panel, Analytics, Notifications, Settings, Feedback & Support
 - **Role-Based Access Control**: Admin, editor, and viewer roles for secure access
 - **User Management**: View, search, filter, and edit users (role/status) with Headless UI modal
