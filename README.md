@@ -16,26 +16,28 @@ A modern, full-featured job board web application built with React, Vite, DaisyU
 
 ### Admin Panel Features (NEW)
 
-**Admin Dashboard**: Sidebar navigation for User Management, Jobs Panel, Analytics, Notifications, Settings, Feedback & Support
-**Role-Based Access Control**: Admin, editor, and viewer roles for secure access
-**User Management**: View, search, filter, and edit users (role/status) with Headless UI modal
-**Jobs Panel**: Add, edit, delete, feature/unfeature jobs, bulk actions (bulk delete, bulk feature/unfeature), search/filter, and pagination
-**Bulk Actions**: Select multiple jobs for bulk delete or feature/unfeature, with confirmation modal (Headless UI Dialog)
-**Inline Validation**: Real-time inline validation for all job and user forms (required fields, valid URLs, etc.)
-**Application Link**: Jobs support external application links, shown as 'Apply Now' buttons
-**Slug & Tags**: Jobs support unique slugs and comma-separated tags for advanced filtering and search
-**Pagination**: Admin jobs panel includes pagination for easier job management
-**Role-Based UI**: UI actions and buttons are enabled/disabled based on user role (admin, editor, viewer)
-**Profile Social Links**: Users can customize visibility of their Twitter and LinkedIn links in their profile
-**Job Analytics**: View job stats (customizable)
-**Notifications**: Send announcements to all users, save notifications to Firestore, view sent notifications
-**Settings**: Update site branding and featured tags, save to Firestore
-**Feedback & Support**: View user feedback, respond via modal, save responses to Firestore
-**Consistent UI**: All admin features use DaisyUI 5 and Headless UI for modern, accessible design
-**Wide Card Layouts**: Admin pages use wide, responsive cards for better usability
-**Status Feedback**: DaisyUI alerts and spinners for all status messages
-**Accessibility**: All form fields have proper `id` and `name` attributes for autofill/accessibility; all modals/dialogs use accessible Headless UI components
-**Firestore Integration**: Jobs, users, notifications, feedback, and settings are stored in Firestore
+#### Admin Panel Features (NEW)
+
+- **Admin Dashboard**: Sidebar navigation for User Management, Jobs Panel, Analytics, Notifications, Settings, Feedback & Support
+- **Role-Based Access Control**: Admin, editor, and viewer roles for secure access
+- **User Management**: View, search, filter, and edit users (role/status) with Headless UI modal
+- **Jobs Panel**: Add, edit, delete, feature/unfeature jobs, bulk actions (bulk delete, bulk feature/unfeature), search/filter, and pagination
+- **Bulk Actions**: Select multiple jobs for bulk delete or feature/unfeature, with confirmation modal (Headless UI Dialog)
+- **Inline Validation**: Real-time inline validation for all job and user forms (required fields, valid URLs, etc.)
+- **Application Link**: Jobs support external application links, shown as 'Apply Now' buttons
+- **Slug & Tags**: Jobs support unique slugs and comma-separated tags for advanced filtering and search
+- **Pagination**: Admin jobs panel includes pagination for easier job management
+- **Role-Based UI**: UI actions and buttons are enabled/disabled based on user role (admin, editor, viewer)
+- **Profile Social Links**: Users can customize visibility of their Twitter and LinkedIn links in their profile
+- **Job Analytics**: View job stats (customizable)
+- **Notifications**: Send announcements to all users, save notifications to Firestore, view sent notifications
+- **Settings**: Update site branding and featured tags, save to Firestore
+- **Feedback & Support**: View user feedback, respond via modal, save responses to Firestore
+- **Consistent UI**: All admin features use DaisyUI 5 and Headless UI for modern, accessible design
+- **Wide Card Layouts**: Admin pages use wide, responsive cards for better usability
+- **Status Feedback**: DaisyUI alerts and spinners for all status messages
+- **Accessibility**: All form fields have proper `id` and `name` attributes for autofill/accessibility; all modals/dialogs use accessible Headless UI components
+- **Firestore Integration**: Jobs, users, notifications, feedback, and settings are stored in Firestore
 
 ## Project Structure
 
