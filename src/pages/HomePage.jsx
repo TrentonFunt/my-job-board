@@ -5,9 +5,13 @@ import JobCard from "../components/ui/JobCard";
 import SearchAndFilterBar from "../components/ui/SearchAndFilter";
 import Spinner from "../components/ui/Spinner";
 import UserProfileSummary from "../components/ui/UserProfileSummary";
+
 import BlogHighlights from "../components/ui/BlogHighlights";
 import RecentSearchesSidebarContainer from "../components/ui/RecentSearchesSidebarContainer";
 import FeaturedJobs from "../components/ui/FeaturedJobs";
+import CompanySpotlight from "../components/ui/CompanySpotlight";
+import TrendingTags from "../components/ui/TrendingTags";
+import Testimonials from "../components/ui/Testimonials";
 
 
 export default function HomePage() {
@@ -61,55 +65,61 @@ export default function HomePage() {
 	const companyOptions = Array.from(new Set(jobs.map(j => j.company_name))).filter(Boolean);
 	const locationOptions = Array.from(new Set(jobs.map(j => j.location))).filter(Boolean);
 
-	// Apply search + filter logic
-	useEffect(() => {
-		let filtered = jobs;
 
-		if (filters.search) {
-			filtered = filtered.filter((job) =>
-				job.title.toLowerCase().includes(filters.search.toLowerCase())
-			);
-		}
-		if (filters.location) {
-			filtered = filtered.filter((job) =>
-				job.location && job.location.toLowerCase().includes(filters.location.toLowerCase())
-			);
-		}
-		if (filters.jobType) {
-			filtered = filtered.filter((job) =>
-				job.tags?.some((tag) =>
-					tag.toLowerCase().includes(filters.jobType.toLowerCase())
-				)
-			);
-		}
-		if (filters.tag) {
-			filtered = filtered.filter((job) =>
-				job.tags?.includes(filters.tag)
-			);
-		}
-		if (filters.company) {
-			filtered = filtered.filter((job) =>
-				job.company_name === filters.company
-			);
-		}
-		if (filters.remote) {
-			filtered = filtered.filter((job) =>
-				job.location && job.location.toLowerCase().includes(filters.remote.toLowerCase())
-			);
-		}
-		if (filters.salary) {
-			filtered = filtered.filter((job) => {
-				// If salary info is available in job, filter by min salary
-				if (job.salary && typeof job.salary === "number") {
-					return job.salary >= Number(filters.salary);
-				}
-				return true;
-			});
-		}
+		// Apply search + filter logic
+		useEffect(() => {
+			let filtered = jobs;
 
-		setFilteredJobs(filtered);
-		setCurrentPage(1); // Reset to first page on filter change
-	}, [filters, jobs]);
+			if (filters.search) {
+				filtered = filtered.filter((job) =>
+					job.title.toLowerCase().includes(filters.search.toLowerCase())
+				);
+			}
+			if (filters.location) {
+				filtered = filtered.filter((job) =>
+					job.location && job.location.toLowerCase().includes(filters.location.toLowerCase())
+				);
+			}
+			if (filters.jobType) {
+				filtered = filtered.filter((job) =>
+					job.tags?.some((tag) =>
+						tag.toLowerCase().includes(filters.jobType.toLowerCase())
+					)
+				);
+			}
+			if (filters.tag) {
+				filtered = filtered.filter((job) =>
+					job.tags?.includes(filters.tag)
+				);
+			}
+			if (filters.company) {
+				filtered = filtered.filter((job) =>
+					job.company_name === filters.company
+				);
+			}
+			if (filters.remote) {
+				filtered = filtered.filter((job) =>
+					job.location && job.location.toLowerCase().includes(filters.remote.toLowerCase())
+				);
+			}
+			if (filters.salary) {
+				filtered = filtered.filter((job) => {
+					// If salary info is available in job, filter by min salary
+					if (job.salary && typeof job.salary === "number") {
+						return job.salary >= Number(filters.salary);
+					}
+					return true;
+				});
+			}
+
+			setFilteredJobs(filtered);
+			setCurrentPage(1); // Reset to first page on filter change
+		}, [filters, jobs]);
+
+		// Handler for trending tag click
+		const handleTrendingTagClick = (tag) => {
+			setFilters((prev) => ({ ...prev, tag }));
+		};
 
 	const handleFilter = useCallback((f) => setFilters((prev) => ({ ...prev, ...f })), []);
 
@@ -141,72 +151,89 @@ export default function HomePage() {
 		}
 	};
 
-	return (
-		<div className="w-full px-2 sm:px-4 py-4 sm:py-8">
-			<UserProfileSummary />
-			<div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-8 w-full">
-				{/* Main job search and recent searches side by side */}
-				<div className="md:col-span-8 lg:col-span-9">
-					<div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
-						<h1 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Find Your Next Job</h1>
-						<SearchAndFilterBar
-							onSearch={handleSearchWithSave}
-							onFilter={handleFilter}
-							tagOptions={tagOptions}
-							companyOptions={companyOptions}
-							locationOptions={locationOptions}
-						/>
+
+				return (
+					<div className="w-full px-1 sm:px-2 py-4 sm:py-8">
+						<UserProfileSummary />
+								<div className="container mx-auto max-w-screen-2xl px-0 sm:px-6">
+									<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+										{/* Left sidebar */}
+										<aside className="hidden lg:block lg:col-span-3 xl:col-span-3">
+											<RecentSearchesSidebarContainer />
+										</aside>
+										{/* Main content */}
+										<div className="col-span-1 lg:col-span-6 xl:col-span-6">
+									<div className="card bg-base-100 shadow-xl border border-base-300 p-4 sm:p-8 mb-4 sm:mb-8">
+										<h1 className="text-2xl sm:text-4xl font-bold text-accent mb-4 sm:mb-6">Find Your Next Job</h1>
+										<SearchAndFilterBar
+											onSearch={handleSearchWithSave}
+											onFilter={handleFilter}
+											tagOptions={tagOptions}
+											companyOptions={companyOptions}
+											locationOptions={locationOptions}
+										/>
+									</div>
+									<TrendingTags onTagClick={handleTrendingTagClick} />
+																			<FeaturedJobs jobs={jobs} />
+																			<div className="w-full mt-4 sm:mt-8">
+																				<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
+																					{jobsToShow.length > 0 ? (
+																						jobsToShow.map((job) => (
+												<JobCard
+													key={job.slug}
+													slug={job.slug}
+													title={job.title}
+													company={job.company_name}
+													description={job.description}
+													location={job.location}
+													salary={job.salary}
+													tags={job.tags}
+												/>
+																						))
+																					) : (
+																						<p className="text-center mt-10 text-base-content/70">No jobs found.</p>
+																					)}
+																				</div>
+																			</div>
+									{/* Pagination controls */}
+									{totalPages > 1 && (
+										<div className="flex flex-wrap justify-center items-center gap-2 mt-4 sm:mt-8">
+											<button
+												className="btn btn-xs sm:btn-sm btn-outline btn-accent"
+												onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+												disabled={currentPage === 1}
+											>
+												Prev
+											</button>
+											{Array.from({ length: totalPages }, (_, i) => (
+												<button
+													key={i + 1}
+													className={`btn btn-xs sm:btn-sm ${currentPage === i + 1 ? "btn-accent" : "btn-outline btn-accent"}`}
+													onClick={() => setCurrentPage(i + 1)}
+												>
+													{i + 1}
+												</button>
+											))}
+											<button
+												className="btn btn-xs sm:btn-sm btn-outline btn-accent"
+												onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+												disabled={currentPage === totalPages}
+											>
+												Next
+											</button>
+										</div>
+									)}
+									<BlogHighlights />
+									<div className="mt-8">
+										<Testimonials />
+									</div>
+								</div>
+											{/* Right sidebar */}
+											<aside className="hidden lg:block lg:col-span-3 xl:col-span-3">
+												<CompanySpotlight />
+											</aside>
+							</div>
+						</div>
 					</div>
-				</div>
-				<aside className="block w-full mb-4 md:mb-0 md:col-span-4 lg:col-span-3">
-					<RecentSearchesSidebarContainer />
-				</aside>
-			</div>
-			<FeaturedJobs jobs={jobs} />
-			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-8">
-				{jobsToShow.length > 0 ? (
-					jobsToShow.map((job) => (
-						<JobCard
-							key={job.slug}
-							slug={job.slug}
-							title={job.title}
-							company={job.company_name}
-							description={job.description}
-						/>
-					))
-				) : (
-					<p className="text-center mt-10 text-base-content/70">No jobs found.</p>
-				)}
-			</div>
-			{/* Pagination controls */}
-			{totalPages > 1 && (
-				<div className="flex flex-wrap justify-center items-center gap-2 mt-4 sm:mt-8">
-					<button
-						className="btn btn-xs sm:btn-sm btn-outline btn-accent"
-						onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-						disabled={currentPage === 1}
-					>
-						Prev
-					</button>
-					{Array.from({ length: totalPages }, (_, i) => (
-						<button
-							key={i + 1}
-							className={`btn btn-xs sm:btn-sm ${currentPage === i + 1 ? "btn-accent" : "btn-outline btn-accent"}`}
-							onClick={() => setCurrentPage(i + 1)}
-						>
-							{i + 1}
-						</button>
-					))}
-					<button
-						className="btn btn-xs sm:btn-sm btn-outline btn-accent"
-						onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-						disabled={currentPage === totalPages}
-					>
-						Next
-					</button>
-				</div>
-			)}
-			<BlogHighlights />
-		</div>
-		);
+				);
 }

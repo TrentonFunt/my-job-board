@@ -1,28 +1,53 @@
+
 import Navbar from "./NavBar";
 import { Outlet, useLocation, Navigate } from "react-router";
 import Footer from "./Footer";
 import { useAuth } from "../../context/useAuth";
 
+// List of public routes
+const PUBLIC_PATHS = [
+  "/",
+  "/about",
+  "/contact",
+  "/auth",
+  "/signup",
+  "/jobs"
+];
+
 export default function Layout() {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  // Only allow access to home if authenticated
-  if (
-    !loading &&
-    !user &&
-    location.pathname !== "/account" &&
-    location.pathname !== "/signup" &&
-    location.pathname !== "/auth"
-  ) {
-    return <Navigate to="/auth" replace />;
+  // If not loading and not authenticated
+  if (!loading && !user) {
+    // Allow public pages
+    if (PUBLIC_PATHS.includes(location.pathname)) {
+      return (
+        <div className="flex flex-col min-h-screen bg-base-200">
+          <Navbar />
+          <main className="flex-1">
+            <div className="w-full px-0">
+              <Outlet />
+            </div>
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+    // If trying to access a job detail page, redirect to signup
+    if (location.pathname.startsWith("/job/")) {
+      return <Navigate to="/signup" replace state={{ from: location }} />;
+    }
+    // Otherwise, redirect to auth for protected pages
+    return <Navigate to="/auth" replace state={{ from: location }} />;
   }
 
+  // Authenticated or loading
   return (
     <div className="flex flex-col min-h-screen bg-base-200">
       <Navbar />
       <main className="flex-1">
-        <div className="container mx-auto max-w-4xl px-6 py-12">
+        <div className="w-full px-0">
           <Outlet />
         </div>
       </main>

@@ -1,4 +1,3 @@
-import React from "react";
 import { auth } from "../../firebase";
 import { useEffect, useState } from "react";
 
@@ -15,8 +14,8 @@ export default function UserProfileSummary() {
   return (
     <div className="card bg-base-200 shadow mb-6 flex items-center justify-center p-4 gap-4">
       <div className="avatar placeholder">
-        <div className="bg-primary text-base-100 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">
-          {user.displayName ? user.displayName[0] : user.email[0]}
+        <div className="bg-primary text-base-100 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold text-center">
+          <span className="w-full text-center block">{user.displayName ? user.displayName[0] : user.email[0]}</span>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center text-center">

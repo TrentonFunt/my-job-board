@@ -12,7 +12,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
 
   const handleSignOut = async () => {
     await auth.signOut();
-    navigate('/auth');
+    navigate('/');
   };
 
   return (
@@ -35,16 +35,28 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
               )}
             </button>
           )}
-          <Link to="/" className="flex items-center h-12">
+          <Link
+            to={user ? "/jobs" : "/"}
+            className="flex items-center h-12"
+            onClick={e => {
+              if (!user && location.pathname === "/auth") {
+                e.preventDefault();
+                navigate("/");
+              }
+            }}
+          >
             <span className="text-2xl font-bold text-accent tracking-tight flex items-center h-12">Role Rocket</span>
           </Link>
         </div>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/" className="btn btn-ghost rounded-btn text-base font-medium">Home</Link>
+          <Link to="/jobs" className="btn btn-ghost rounded-btn text-base font-medium">Jobs</Link>
           <Link to="/about" className="btn btn-ghost rounded-btn text-base font-medium">About</Link>
-          <Link to="/account" className="btn btn-ghost rounded-btn text-base font-medium">Account</Link>
+          <Link to="/contact" className="btn btn-ghost rounded-btn text-base font-medium">Contact</Link>
+          {user && (
+            <Link to="/account" className="btn btn-ghost rounded-btn text-base font-medium">Account</Link>
+          )}
           {isAdmin && !adminLoading && (
             <Link to="/admin" className="btn btn-ghost rounded-btn text-base font-medium">Admin</Link>
           )}
@@ -58,7 +70,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
 
         {/* Mobile Menu */}
         <div className="md:hidden flex items-center h-12">
-          <Menu as="div" className="relative inline-block text-left h-12 flex items-center">
+          <Menu as="div" className="relative text-left h-12 flex items-center">
             <MenuButton className="btn btn-ghost btn-circle flex items-center justify-center h-12">
               <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
             </MenuButton>
@@ -66,7 +78,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
               <div className="py-2 flex flex-col gap-1">
                 <MenuItem>
                   {({ focus }) => (
-                    <Link to="/" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Home</Link>
+                    <Link to="/jobs" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Jobs</Link>
                   )}
                 </MenuItem>
                 <MenuItem>
@@ -76,9 +88,16 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
                 </MenuItem>
                 <MenuItem>
                   {({ focus }) => (
-                    <Link to="/account" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Account</Link>
+                    <Link to="/contact" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Contact</Link>
                   )}
                 </MenuItem>
+                {user && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <Link to="/account" className={`btn btn-ghost w-full justify-start ${focus ? 'bg-base-200' : ''}`}>Account</Link>
+                    )}
+                  </MenuItem>
+                )}
                 {isAdmin && !adminLoading && (
                   <MenuItem>
                     {({ focus }) => (

@@ -1,9 +1,11 @@
+import { Link } from "react-router";
+
 export default function Footer() {
   return (
     <footer className="bg-base-200 text-base-content py-8 mt-12 border-t border-base-300">
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
-  {/* About Section */}
-  <div className="flex flex-col items-center sm:items-start gap-3 sm:pl-8">
+        {/* About Section */}
+        <div className="flex flex-col items-center sm:items-start gap-3 sm:pl-8">
           <span className="text-xl font-bold text-accent tracking-tight">Role Rocket</span>
           <p className="text-sm opacity-80 max-w-xs text-center sm:text-left">
             Role Rocket helps you find your next opportunity with curated listings, smart filters, and a modern, user-friendly experience.
@@ -24,20 +26,22 @@ export default function Footer() {
         {/* Quick Links */}
         <div className="flex flex-col items-center gap-2">
           <span className="font-semibold text-base-content/80 mb-2">Quick Links</span>
-          <a href="/" className="link link-hover text-base-content/70 hover:text-accent">Home</a>
-          <a href="/account" className="link link-hover text-base-content/70 hover:text-accent">Account</a>
-          <a href="/signup" className="link link-hover text-base-content/70 hover:text-accent">Sign Up</a>
+          <Link to="/" className="link link-hover text-base-content/70 hover:text-accent">Landing</Link>
+          <Link to="/jobs" className="link link-hover text-base-content/70 hover:text-accent">Jobs</Link>
+          <Link to="/about" className="link link-hover text-base-content/70 hover:text-accent">About</Link>
+          <Link to="/contact" className="link link-hover text-base-content/70 hover:text-accent">Contact</Link>
+          <Link to="/account" className="link link-hover text-base-content/70 hover:text-accent">Account</Link>
+          <Link to="/signup" className="link link-hover text-base-content/70 hover:text-accent">Sign Up</Link>
         </div>
         {/* Legal & Contact */}
         <div className="flex flex-col items-center gap-2">
-          <span className="font-semibold text-base-content/80 mb-2">Legal & Contact</span>
+          <span className="font-semibold text-base-content/80 mb-2">Legal</span>
           <a href="#" className="link link-hover text-base-content/70 hover:text-accent">Privacy Policy</a>
           <a href="#" className="link link-hover text-base-content/70 hover:text-accent">Terms of Service</a>
-          <a href="#" className="link link-hover text-base-content/70 hover:text-accent">Contact</a>
         </div>
       </div>
       <div className="container mx-auto text-center mt-8 text-xs opacity-70">
-  &copy; {new Date().getFullYear()} <span className="font-bold text-accent">Role Rocket</span>. All rights reserved.
+        &copy; {new Date().getFullYear()} <span className="font-bold text-accent">Role Rocket</span>. All rights reserved.
       </div>
     </footer>
   );
