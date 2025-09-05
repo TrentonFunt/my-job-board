@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { updatePassword } from "firebase/auth";
+import Button from "../ui/Button";
 
 export default function ChangePasswordSection() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -71,9 +72,9 @@ export default function ChangePasswordSection() {
           onChange={e => setConfirmPassword(e.target.value)}
           required
         />
-        <button className="btn btn-primary" type="submit" disabled={loading}>
+        <Button className="btn-primary" type="submit" disabled={loading}>
           {loading ? "Changing..." : "Change Password"}
-        </button>
+        </Button>
         {error && <p className="text-error text-sm mt-2">{error}</p>}
         {success && <p className="text-success text-sm mt-2">{success}</p>}
       </form>

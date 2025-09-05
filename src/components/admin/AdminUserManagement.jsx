@@ -1,4 +1,5 @@
 import { Dialog, Transition, TransitionChild, DialogPanel } from '@headlessui/react';
+import Button from "../ui/Button";
 import { Fragment, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
@@ -100,9 +101,9 @@ export default function AdminUserManagement() {
                   <td>{user.status || "active"}</td>
                   <td>{user.role || "user"}</td>
                   <td>
-                      <button className="btn btn-xs btn-primary rounded" onClick={() => handleSelectUser(user)}>
-                      Edit
-                    </button>
+                      <Button className="btn-xs btn-primary rounded" onClick={() => handleSelectUser(user)}>
+                        Edit
+                      </Button>
                   </td>
                 </tr>
               ))
@@ -152,10 +153,10 @@ export default function AdminUserManagement() {
                       <option value="inactive">Inactive</option>
                     </select>
                   </div>
-                  <div className="modal-action mt-4 flex gap-2">
-                      <button type="submit" className="btn btn-primary rounded">Save</button>
-                      <button type="button" className="btn btn-ghost rounded" onClick={() => setSelectedUser(null)}>Cancel</button>
-                  </div>
+          <div className="modal-action mt-4 flex gap-2">
+            <Button type="submit" className="btn-primary rounded">Save</Button>
+            <Button type="button" className="btn-ghost rounded" onClick={() => setSelectedUser(null)}>Cancel</Button>
+          </div>
                 </form>
               </DialogPanel>
             </TransitionChild>

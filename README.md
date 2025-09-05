@@ -1,6 +1,19 @@
+
 # Role Rocket
 
+
 A modern, full-featured job board web application built with React, Vite, DaisyUI, Headless UI, Tailwind CSS, and Firebase.
+
+## Recent Updates (September 2025)
+
+- **Modernized Homepage**: Redesigned homepage with a more modern, visually appealing layout and improved user experience.
+- **Testimonials Carousel**: Added a testimonials section with a carousel for user feedback.
+- **Personalized Recommendations**: Homepage now features personalized job recommendations.
+- **Consistent Button Component**: All buttons across the app (user, account, admin, contact, etc.) now use a custom `Button` component for unified styling and microinteractions.
+- **Microinteractions**: Buttons and interactive elements feature subtle animations and feedback for a polished feel.
+- **Admin Panel Consistency**: All admin panel pages and dialogs use the custom Button and follow consistent UI/UX patterns.
+- **Wider Contact Form**: Name, email, and message fields on the Contact page are now wider for better usability.
+
 
 ## Features
 
@@ -13,8 +26,10 @@ A modern, full-featured job board web application built with React, Vite, DaisyU
 - **Loading Spinner**: DaisyUI spinner for all loading states.
 - **Account Management**: Edit profile, change password, and view account details.
 - **Clean UI**: Unified styling with DaisyUI 5, Headless UI, and Tailwind CSS 4.
+- **Microinteractions**: All buttons and interactive elements use a custom Button component with microinteractions for a modern, responsive feel.
 
-### Admin Panel Features (NEW)
+
+### Admin Panel Features
 
 - **Admin Dashboard**: Sidebar navigation for User Management, Jobs Panel, Analytics, Notifications, Settings, Feedback & Support
 - **Role-Based Access Control**: Admin, editor, and viewer roles for secure access
@@ -31,7 +46,7 @@ A modern, full-featured job board web application built with React, Vite, DaisyU
 - **Notifications**: Send announcements to all users, save notifications to Firestore, view sent notifications
 - **Settings**: Update site branding and featured tags, save to Firestore
 - **Feedback & Support**: View user feedback, respond via modal, save responses to Firestore
-- **Consistent UI**: All admin features use DaisyUI 5 and Headless UI for modern, accessible design
+- **Consistent UI**: All admin features use DaisyUI 5, Headless UI, and the custom Button component for modern, accessible, and consistent design
 - **Wide Card Layouts**: Admin pages use wide, responsive cards for better usability
 - **Status Feedback**: DaisyUI alerts and spinners for all status messages
 - **Accessibility**: All form fields have proper `id` and `name` attributes for autofill/accessibility; all modals/dialogs use accessible Headless UI components
@@ -121,7 +136,11 @@ my-job-board/
 5. **Open in browser**
 	- Visit `http://localhost:5173` (or the port shown in your terminal).
 
+
 ## Usage
+
+- **Modern Homepage**: Enjoy a visually improved homepage with testimonials and recommendations.
+- **Consistent Buttons**: All actions use the new Button component for a unified look and feel.
 
 - **Sign Up / Sign In**: Create an account or log in to access all features.
 - **Search Jobs**: Use the search bar and filters to find jobs.
@@ -155,7 +174,10 @@ Pull requests and suggestions are welcome! Please open an issue for major change
 ![DaisyUI](https://img.shields.io/badge/daisyui-5.0.50-yellow)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-4.1.12-blue)
 
+
 ## Screenshots
+
+> Update screenshots to reflect the new homepage, testimonials carousel, and button styles for the most accurate preview.
 
 > Replace these with your own screenshots in the `screenshots/` folder.
 

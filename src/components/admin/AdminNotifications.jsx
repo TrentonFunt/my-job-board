@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "../ui/Button";
 import { db } from "../../firebase";
 import { collection, addDoc, getDocs, orderBy, query } from "firebase/firestore";
 
@@ -48,9 +49,9 @@ export default function AdminNotifications() {
           onChange={e => setMessage(e.target.value)}
           required
         />
-        <button className="btn btn-primary w-full rounded" type="submit" disabled={loading}>
+        <Button className="btn-primary w-full rounded" type="submit" disabled={loading}>
           {loading ? <span className="loading loading-spinner loading-xs"></span> : "Send"}
-        </button>
+        </Button>
         {success && <div className="alert alert-success mt-2">{success}</div>}
         {error && <div className="alert alert-error mt-2">{error}</div>}
       </form>

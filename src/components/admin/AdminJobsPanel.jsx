@@ -1,4 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
+import Button from "../ui/Button";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, Transition } from '@headlessui/react';
 import AdminJobsPagination from "./AdminJobsPagination";
 import AdminJobsBulkActions from "./AdminJobsBulkActions";
@@ -347,9 +348,9 @@ export default function AdminJobsPanel() {
             <input id="job-featured" type="checkbox" name="featured" checked={form.featured} onChange={handleFormChange} className="checkbox" />
             <span>Featured</span>
           </label>
-          <button className="btn btn-primary rounded mt-2" type="submit" disabled={creating}>
-              {creating ? <span className="loading loading-spinner loading-xs"></span> : "Add Job"}
-            </button>
+      <Button className="btn-primary rounded mt-2" type="submit" disabled={creating}>
+        {creating ? <span className="loading loading-spinner loading-xs"></span> : "Add Job"}
+      </Button>
         </form>
       ) : null}
       {filteredJobs.length === 0 ? (
@@ -413,10 +414,10 @@ export default function AdminJobsPanel() {
                           <span>Featured</span>
                         </label>
                         <div className="flex gap-2 mt-2">
-                          <button className="btn btn-primary btn-sm rounded" type="submit" disabled={editing || role === "viewer"}>
+                          <Button className="btn-primary btn-sm rounded" type="submit" disabled={editing || role === "viewer"}>
                             {editing ? <span className="loading loading-spinner loading-xs"></span> : "Save"}
-                          </button>
-                          <button className="btn btn-ghost btn-sm rounded" type="button" onClick={handleCancelEdit}>Cancel</button>
+                          </Button>
+                          <Button className="btn-ghost btn-sm rounded" type="button" onClick={handleCancelEdit}>Cancel</Button>
                         </div>
                       </form>
                     </td>
@@ -441,29 +442,30 @@ export default function AdminJobsPanel() {
                         )}
                       </td>
                       <td className="flex gap-2">
-                        <button
-                          className={`btn btn-sm rounded ${job.featured ? "btn-error" : "btn-primary"}`}
+                        <Button
+                          className={`btn-sm rounded ${job.featured ? "btn-error" : "btn-primary"}`}
                           onClick={() => handleToggleFeatured(job.id, job.featured)}
                           disabled={role !== "admin" || updating}
+                          type="button"
                         >
                           {updating ? <span className="loading loading-spinner loading-xs"></span> : job.featured ? "Unmark" : "Mark as Featured"}
-                        </button>
-                        <button
-                          className="btn btn-primary btn-sm rounded"
+                        </Button>
+                        <Button
+                          className="btn-primary btn-sm rounded"
                           type="button"
                           onClick={() => handleEditClick(job)}
                           disabled={role === "viewer" || updating}
                         >
                           Edit
-                        </button>
-                        <button
-                          className="btn btn-error btn-sm rounded"
+                        </Button>
+                        <Button
+                          className="btn-error btn-sm rounded"
                           type="button"
                           onClick={() => handleDeleteJob(job.id)}
                           disabled={role !== "admin" || deleting}
                         >
                           {deleting ? <span className="loading loading-spinner loading-xs"></span> : "Delete"}
-                        </button>
+                        </Button>
                       </td>
                     </>
                   )}
@@ -501,10 +503,10 @@ export default function AdminJobsPanel() {
                 <DialogTitle className="text-lg font-bold mb-2">Confirm Bulk Delete</DialogTitle>
                 <p className="mb-4">Are you sure you want to delete <span className="font-semibold">{selectedJobIds.length}</span> selected jobs? This action cannot be undone.</p>
                 <div className="flex gap-2 justify-end">
-                  <button className="btn btn-ghost rounded" onClick={() => setShowBulkDeleteModal(false)} disabled={deleting}>Cancel</button>
-                  <button className="btn btn-error rounded" onClick={handleDeleteSelected} disabled={deleting}>
+                  <Button className="btn-ghost rounded" onClick={() => setShowBulkDeleteModal(false)} disabled={deleting} type="button">Cancel</Button>
+                  <Button className="btn-error rounded" onClick={handleDeleteSelected} disabled={deleting} type="button">
                     {deleting ? <span className="loading loading-spinner loading-xs"></span> : "Delete"}
-                  </button>
+                  </Button>
                 </div>
               </DialogPanel>
             </TransitionChild>

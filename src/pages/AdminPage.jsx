@@ -1,4 +1,5 @@
 import { useAuth } from "../context/useAuth";
+import Button from "../components/ui/Button";
 import useUserRole from "../components/admin/useUserRole";
 import AdminPanelLayout from "../components/admin/AdminPanelLayout";
 import { Navigate } from "react-router";
@@ -23,7 +24,7 @@ export default function AdminPage() {
           <p className="mb-2 text-base-content/80">You must be signed in as an admin to view this page.</p>
           <p className="mb-2 text-base-content/70">Current user: <span className="font-semibold">{user ? user.email : "None"}</span></p>
           <p className="mb-2 text-base-content/70">Detected role: <span className="font-semibold">{role || "None"}</span></p>
-          <a href="/auth" className="btn btn-primary mt-4">Sign In</a>
+          <Button as="a" href="/auth" className="btn-primary mt-4">Sign In</Button>
         </div>
       </div>
     );

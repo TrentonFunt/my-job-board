@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../ui/Button";
 import AdminUserManagement from "./AdminUserManagement";
 import AdminJobAnalytics from "./AdminJobAnalytics";
 import AdminNotifications from "./AdminNotifications";
@@ -24,13 +25,14 @@ export default function AdminPanelLayout() {
         <h1 className="text-2xl font-bold text-accent mb-6">Admin Panel</h1>
         <nav className="flex flex-col gap-2">
           {MENU.map(item => (
-            <button
+            <Button
               key={item.key}
-              className={`btn btn-ghost justify-start text-left ${active === item.key ? "btn-active bg-base-300" : ""}`}
+              className={`btn-ghost justify-start text-left w-full ${active === item.key ? "btn-active bg-base-300" : ""}`}
               onClick={() => setActive(item.key)}
+              type="button"
             >
               {item.label}
-            </button>
+            </Button>
           ))}
         </nav>
       </aside>

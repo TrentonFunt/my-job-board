@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import Button from "../ui/Button";
 import { Dialog, Transition } from '@headlessui/react';
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -52,9 +53,9 @@ export default function AdminSettings() {
           value={featuredTags}
           onChange={e => setFeaturedTags(e.target.value)}
         />
-        <button className="btn btn-primary w-full rounded" type="submit" disabled={loading}>
+        <Button className="btn-primary w-full rounded" type="submit" disabled={loading}>
           {loading ? <span className="loading loading-spinner loading-xs"></span> : "Save"}
-        </button>
+        </Button>
         {success && <div className="alert alert-success mt-2">{success}</div>}
         {error && <div className="alert alert-error mt-2">{error}</div>}
       </form>
@@ -86,10 +87,10 @@ export default function AdminSettings() {
                 <Dialog.Title className="text-lg font-bold mb-2">Confirm Save</Dialog.Title>
                 <p className="mb-4">Are you sure you want to save these settings?</p>
                 <div className="flex gap-2 justify-end">
-                  <button className="btn btn-ghost rounded" type="button" onClick={() => setShowConfirm(false)} disabled={loading}>Cancel</button>
-                  <button className="btn btn-primary rounded" type="button" onClick={confirmSave} disabled={loading}>
+                  <Button className="btn-ghost rounded" type="button" onClick={() => setShowConfirm(false)} disabled={loading}>Cancel</Button>
+                  <Button className="btn-primary rounded" type="button" onClick={confirmSave} disabled={loading}>
                     {loading ? <span className="loading loading-spinner loading-xs"></span> : "Save"}
-                  </button>
+                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

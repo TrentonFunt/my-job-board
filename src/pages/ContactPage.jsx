@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../components/ui/Button";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -20,11 +21,11 @@ export default function ContactPage() {
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-base-100 px-4">
-      <div className="max-w-lg w-full card bg-base-200 p-8 shadow">
+  <div className="max-w-2xl w-full card bg-base-200 p-8 shadow">
         <h1 className="text-3xl font-bold mb-4 text-center">Contact Us</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-            className="input input-bordered"
+            className="input input-bordered w-full"
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -32,7 +33,7 @@ export default function ContactPage() {
             required
           />
           <input
-            className="input input-bordered"
+            className="input input-bordered w-full"
             name="email"
             type="email"
             value={form.email}
@@ -41,7 +42,7 @@ export default function ContactPage() {
             required
           />
           <textarea
-            className="textarea textarea-bordered"
+            className="textarea textarea-bordered w-full"
             name="message"
             value={form.message}
             onChange={handleChange}
@@ -49,9 +50,9 @@ export default function ContactPage() {
             rows={5}
             required
           />
-          <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
+          <Button className="btn-primary" type="submit" disabled={status === "sending"}>
             {status === "sending" ? "Sending..." : "Send Message"}
-          </button>
+          </Button>
           {status === "success" && (
             <div className="alert alert-success mt-2">Thank you! We'll be in touch soon.</div>
           )}

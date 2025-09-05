@@ -223,16 +223,16 @@ export default function EditProfileModal({
           )}
         </div>
         <div className="modal-action mt-4">
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => setEditOpen(false)}
-          >
-            Cancel
-          </button>
+              <Button type="submit" className="btn-primary">
+                Save
+              </Button>
+              <Button
+                type="button"
+                className=""
+                onClick={() => setEditOpen(false)}
+              >
+                Cancel
+              </Button>
         </div>
       </form>
     </dialog>

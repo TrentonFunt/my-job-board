@@ -1,5 +1,6 @@
 
 import { useNavigate } from "react-router";
+import Button from "../components/ui/Button";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center mt-6">
-            <button className="btn btn-primary btn-lg" onClick={() => navigate("/signup")}>Sign Up</button>
-            <button className="btn btn-outline btn-lg" onClick={() => navigate("/jobs")}>Browse Jobs</button>
+            <Button className="btn-primary btn-lg" onClick={() => navigate("/signup")}>Sign Up</Button>
+            <Button className="btn-outline btn-lg" onClick={() => navigate("/jobs")}>Browse Jobs</Button>
           </div>
         </div>
       </div>

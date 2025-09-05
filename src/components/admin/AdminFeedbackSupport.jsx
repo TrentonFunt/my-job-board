@@ -1,4 +1,5 @@
-import { DialogPanel, Transition, TransitionChild } from '@headlessui/react';
+import { DialogPanel, Transition, TransitionChild, Dialog } from '@headlessui/react';
+import Button from "../ui/Button";
 import { Fragment, useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
@@ -59,9 +60,9 @@ export default function AdminFeedbackSupport() {
                 <td>{fb.response ? "Responded" : "Pending"}</td>
                 <td>
                   {!fb.response && (
-                    <button className="btn btn-xs btn-info" onClick={() => setSelectedFeedback(fb)}>
+                    <Button className="btn-xs btn-info" onClick={() => setSelectedFeedback(fb)}>
                       Respond
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>
@@ -105,8 +106,8 @@ export default function AdminFeedbackSupport() {
                     required
                   />
                   <div className="modal-action mt-4 flex gap-2">
-                    <button type="submit" className="btn btn-primary">Send</button>
-                    <button type="button" className="btn" onClick={() => setSelectedFeedback(null)}>Cancel</button>
+                    <Button type="submit" className="btn-primary">Send</Button>
+                    <Button type="button" className="" onClick={() => setSelectedFeedback(null)}>Cancel</Button>
                   </div>
                 </form>
               </DialogPanel>

@@ -12,15 +12,15 @@ export default function AdminJobsBulkActions({ selectedJobIds, onDeleteSelected,
 
   return (
     <div className="flex gap-2 mb-4">
-      <button className="btn btn-error btn-sm" type="button" onClick={onDeleteSelected}>
-        Delete Selected
-      </button>
-      <button className="btn btn-success btn-sm" type="button" onClick={onFeatureSelected}>
-        Mark as Featured
-      </button>
-      <button className="btn btn-warning btn-sm" type="button" onClick={onUnfeatureSelected}>
-        Unmark as Featured
-      </button>
+        <Button className="btn-error btn-sm" type="button" onClick={onDeleteSelected}>
+          Delete Selected
+        </Button>
+        <Button className="btn-success btn-sm" type="button" onClick={onFeatureSelected}>
+          Mark as Featured
+        </Button>
+        <Button className="btn-warning btn-sm" type="button" onClick={onUnfeatureSelected}>
+          Unmark as Featured
+        </Button>
       <span className="ml-2 text-sm">{selectedJobIds.length} selected</span>
     </div>
   );

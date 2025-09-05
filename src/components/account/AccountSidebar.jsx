@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../ui/Button";
 
 export default function AccountSidebar({ userData, avatarPreview, activeSection, setActiveSection, open, setOpen }) {
   return (
@@ -16,14 +17,15 @@ export default function AccountSidebar({ userData, avatarPreview, activeSection,
               <span className="flex items-center justify-center w-full h-full">{userData?.firstName?.[0] || "U"}{userData?.lastName?.[0] || "N"}</span>
             </div>
           )}
-          <button
-            className="btn btn-xs btn-circle btn-ghost absolute bottom-0 right-0 flex items-center justify-center py-2"
+          <Button
+            className="btn-xs btn-circle btn-ghost absolute bottom-0 right-0 flex items-center justify-center py-2"
             title="Change Avatar"
             aria-label="Edit Avatar"
             onClick={() => document.getElementById('sidebar-avatar-input')?.click()}
+            type="button"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-2.828 1.172H7v-2a4 4 0 011.172-2.828z" /></svg>
-          </button>
+          </Button>
           <input
             type="file"
             accept="image/*"
@@ -35,34 +37,38 @@ export default function AccountSidebar({ userData, avatarPreview, activeSection,
         <span className="text-base-content/70 text-sm">{userData?.email}</span>
       </div>
       <nav className="flex flex-col gap-2 w-full">
-        <button
-          className={`btn btn-ghost justify-start text-left w-full ${activeSection === "profile" ? "btn-active bg-base-300" : ""}`}
+        <Button
+          className={`btn-ghost justify-start text-left w-full ${activeSection === "profile" ? "btn-active bg-base-300" : ""}`}
           onClick={() => { setActiveSection("profile"); setOpen(false); }}
           aria-label="Profile"
+          type="button"
         >
           Profile
-        </button>
-        <button
-          className={`btn btn-ghost justify-start text-left w-full ${activeSection === "password" ? "btn-active bg-base-300" : ""}`}
+        </Button>
+        <Button
+          className={`btn-ghost justify-start text-left w-full ${activeSection === "password" ? "btn-active bg-base-300" : ""}`}
           onClick={() => { setActiveSection("password"); setOpen(false); }}
           aria-label="Change Password"
+          type="button"
         >
           Change Password
-        </button>
-        <button
-          className={`btn btn-ghost justify-start text-left w-full ${activeSection === "saved" ? "btn-active bg-base-300" : ""}`}
+        </Button>
+        <Button
+          className={`btn-ghost justify-start text-left w-full ${activeSection === "saved" ? "btn-active bg-base-300" : ""}`}
           onClick={() => { setActiveSection("saved"); setOpen(false); }}
           aria-label="Saved Jobs"
+          type="button"
         >
           Saved Jobs
-        </button>
-        <button
-          className={`btn btn-ghost justify-start text-left w-full ${activeSection === "settings" ? "btn-active bg-base-300" : ""}`}
+        </Button>
+        <Button
+          className={`btn-ghost justify-start text-left w-full ${activeSection === "settings" ? "btn-active bg-base-300" : ""}`}
           onClick={() => { setActiveSection("settings"); setOpen(false); }}
           aria-label="Settings"
+          type="button"
         >
           Settings
-        </button>
+        </Button>
       </nav>
     </aside>
   );

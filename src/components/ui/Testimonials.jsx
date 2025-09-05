@@ -58,7 +58,7 @@ export default function Testimonials() {
             </SwiperSlide>
           ))}
         </Swiper>
-  <div className="swiper-custom-pagination flex justify-center mt-2 absolute left-0 right-0 bottom-[-30px] z-10" />
+  <div className="swiper-custom-pagination flex justify-center mt-2 absolute left-0 right-0 bottom-[-55px] z-10" />
       </div>
       <style>{`
         .swiper-pagination-bullet {
