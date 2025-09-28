@@ -1,8 +1,9 @@
 
-import Navbar from "./NavBar";
+import Navbar from "./Navbar";
 import { Outlet, useLocation, Navigate } from "react-router";
 import Footer from "./Footer";
 import { useAuth } from "../../context/useAuth";
+import BackToTopButton from "../ui/BackToTopButton";
 
 // List of public routes
 const PUBLIC_PATHS = [
@@ -11,7 +12,9 @@ const PUBLIC_PATHS = [
   "/contact",
   "/auth",
   "/signup",
-  "/jobs"
+  "/jobs",
+  "/blog",
+  "/404"
 ];
 
 export default function Layout() {
@@ -23,14 +26,15 @@ export default function Layout() {
     // Allow public pages
     if (PUBLIC_PATHS.includes(location.pathname)) {
       return (
-        <div className="flex flex-col min-h-screen bg-base-200">
+        <div className="flex flex-col min-h-screen bg-slate-900">
           <Navbar />
           <main className="flex-1">
-            <div className="w-full px-0">
+            <div className="w-full">
               <Outlet />
             </div>
           </main>
           <Footer />
+          <BackToTopButton />
         </div>
       );
     }
@@ -44,14 +48,15 @@ export default function Layout() {
 
   // Authenticated or loading
   return (
-    <div className="flex flex-col min-h-screen bg-base-200">
+    <div className="flex flex-col min-h-screen bg-slate-900">
       <Navbar />
       <main className="flex-1">
-        <div className="w-full px-0">
+        <div className="w-full">
           <Outlet />
         </div>
       </main>
       <Footer />
+      <BackToTopButton />
     </div>
   );
 }

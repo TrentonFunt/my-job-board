@@ -1,2 +1,242 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Ensure full viewport utilization */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-responsive {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .btn-responsive {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Remove any default margins/padding that might constrain layout */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure containers can expand to full width */
+.container {
+  max-width: none !important;
+}
+
+/* Custom CSS Variables for Role Rocket Branding */
+:root {
+  --primary-green: #10b981;
+  --primary-green-dark: #059669;
+  --accent-purple: #8b5cf6;
+  --accent-purple-dark: #7c3aed;
+}
+
+/* DaisyUI Theme Customization for Better Text Contrast */
+.light {
+  --fallback-bc: #1f2937; /* Dark text for light mode */
+  --fallback-b1: #ffffff; /* Pure white background */
+  --fallback-b2: #f8fafc; /* Very light gray background */
+  --fallback-b3: #e2e8f0; /* Light gray background */
+  --fallback-p: #10b981; /* Primary color */
+  --fallback-pc: #ffffff; /* Primary content color */
+  --fallback-s: #8b5cf6; /* Secondary color */
+  --fallback-sc: #ffffff; /* Secondary content color */
+  --fallback-er: #ef4444; /* Error color */
+  --fallback-erc: #ffffff; /* Error content color */
+  --fallback-su: #10b981; /* Success color */
+  --fallback-suc: #ffffff; /* Success content color */
+}
+
+/* Custom job card styling for better light mode appearance */
+.light .card {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+.light .card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Light mode tag styling */
+.light .card .bg-base-200 {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+.light .card .text-primary {
+  color: #10b981 !important;
+}
+
+/* Ensure text colors work properly in light mode */
+.light .text-base-content {
+  color: #1f2937 !important;
+}
+
+.light .text-base-content\/70 {
+  color: #6b7280 !important;
+}
+
+.light .text-base-content\/60 {
+  color: #9ca3af !important;
+}
+
+.light .text-base-content\/50 {
+  color: #d1d5db !important;
+}
+
+/* Ensure sidebar and main content areas are properly styled in light mode */
+.light .bg-base-100 {
+  background-color: #ffffff !important;
+}
+
+.light .bg-base-200 {
+  background-color: #f8fafc !important;
+}
+
+.light .bg-base-300 {
+  background-color: #e2e8f0 !important;
+}
+
+.light .border-base-300 {
+  border-color: #e2e8f0 !important;
+}
+
+.dark {
+  --fallback-bc: #f8fafc; /* Light text for dark mode */
+  --fallback-b1: #0f172a; /* Dark background */
+  --fallback-b2: #1e293b; /* Dark secondary background */
+  --fallback-b3: #334155; /* Dark tertiary background */
+  --fallback-p: #10b981; /* Primary color */
+  --fallback-pc: #ffffff; /* Primary content color */
+  --fallback-s: #8b5cf6; /* Secondary color */
+  --fallback-sc: #ffffff; /* Secondary content color */
+  --fallback-er: #ef4444; /* Error color */
+  --fallback-erc: #ffffff; /* Error content color */
+  --fallback-su: #10b981; /* Success color */
+  --fallback-suc: #ffffff; /* Success content color */
+}
+
+/* Light theme variables */
+.light {
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --border-color: #d1d5db;
+  --bg-slate-900: #ffffff;
+  --bg-slate-800: #f8fafc;
+  --bg-slate-700: #f1f5f9;
+  --text-white: #1f2937;
+  --text-slate-300: #64748b;
+  --text-slate-400: #94a3b8;
+  --border-slate-700: #d1d5db;
+  --border-slate-600: #9ca3af;
+}
+
+/* Dark theme variables */
+.dark {
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --border-color: #374151;
+  --bg-slate-900: #0f172a;
+  --bg-slate-800: #1e293b;
+  --bg-slate-700: #334155;
+  --text-white: #ffffff;
+  --text-slate-300: #cbd5e1;
+  --text-slate-400: #94a3b8;
+  --border-slate-700: #374151;
+  --border-slate-600: #4b5563;
+}
+
+/* Custom gradient for Role Rocket logo */
+.role-rocket-gradient {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced button styles */
+.btn-primary-modern {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+/* Enhanced card styles */
+.card-modern {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: var(--primary-green);
+}
+
+/* Theme-aware background classes */
+.bg-slate-900 {
+  background-color: var(--bg-slate-900) !important;
+}
+
+.bg-slate-800 {
+  background-color: var(--bg-slate-800) !important;
+}
+
+.bg-slate-700 {
+  background-color: var(--bg-slate-700) !important;
+}
+
+.text-white {
+  color: var(--text-white) !important;
+}
+
+.text-slate-300 {
+  color: var(--text-slate-300) !important;
+}
+
+.text-slate-400 {
+  color: var(--text-slate-400) !important;
+}
+
+.border-slate-700 {
+  border-color: var(--border-slate-700) !important;
+}
+
+.border-slate-600 {
+  border-color: var(--border-slate-600) !important;
+}
+
+/* Additional border utilities for better visibility */
+.border-slate-500 {
+  border-color: #6b7280 !important;
+}
+
+.border-slate-400 {
+  border-color: #9ca3af !important;
+}

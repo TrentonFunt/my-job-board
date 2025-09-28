@@ -1,4 +1,7 @@
 
+import React from "react";
+import Button from "../ui/Button";
+
 export default function EditProfileModal({
   editOpen,
   editForm,
@@ -62,14 +65,14 @@ export default function EditProfileModal({
           setEditOpen(false);
         }}
       >
-        <h3 className="font-bold text-lg mb-4">Edit Profile</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <h3 className="font-bold text-lg mb-4 text-base-content">Edit Profile</h3>
+        <div className="max-w-md space-y-4">
           <input
             type="text"
             id="profession"
             name="profession"
             placeholder="Profession (e.g. Software Engineer, Recruiter)"
-            className="input input-bordered w-full mb-2 col-span-2"
+            className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             value={editForm.profession || ""}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, profession: e.target.value }))
@@ -80,25 +83,38 @@ export default function EditProfileModal({
             id="displayName"
             name="displayName"
             placeholder="Display Name"
-            className="input input-bordered w-full mb-2 col-span-2"
+            className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             value={editForm.displayName || ""}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, displayName: e.target.value }))
             }
           />
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            placeholder="First Name"
-            className="input input-bordered w-full mb-2"
-            value={editForm.firstName}
-            onChange={(e) =>
-              setEditForm((f) => ({ ...f, firstName: e.target.value }))
-            }
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="First Name"
+              className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              value={editForm.firstName}
+              onChange={(e) =>
+                setEditForm((f) => ({ ...f, firstName: e.target.value }))
+              }
+            />
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              placeholder="Last Name"
+              className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              value={editForm.lastName}
+              onChange={(e) =>
+                setEditForm((f) => ({ ...f, lastName: e.target.value }))
+              }
+            />
+          </div>
           {formErrors.lastName && (
-            <span className="text-error col-span-2">
+            <span className="text-red-400 text-xs">
               {formErrors.lastName}
             </span>
           )}
@@ -107,14 +123,14 @@ export default function EditProfileModal({
             id="email"
             name="email"
             placeholder="Email"
-            className="input input-bordered w-full mb-2 col-span-2"
+            className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             value={editForm.email}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, email: e.target.value }))
             }
           />
           {formErrors.email && (
-            <span className="text-error col-span-2">
+            <span className="text-red-400 text-xs">
               {formErrors.email}
             </span>
           )}
@@ -123,7 +139,7 @@ export default function EditProfileModal({
             id="phone"
             name="phone"
             placeholder="Phone"
-            className="input input-bordered w-full mb-2 col-span-2"
+            className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             value={editForm.phone}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, phone: e.target.value }))
@@ -134,7 +150,7 @@ export default function EditProfileModal({
             id="address"
             name="address"
             placeholder="Address"
-            className="input input-bordered w-full mb-2 col-span-2"
+            className="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             value={editForm.address}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, address: e.target.value }))
@@ -144,7 +160,8 @@ export default function EditProfileModal({
             id="bio"
             name="bio"
             placeholder="Bio"
-            className="textarea textarea-bordered w-full mb-2 col-span-2"
+            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+            rows={3}
             value={editForm.bio}
             onChange={(e) =>
               setEditForm((f) => ({ ...f, bio: e.target.value }))

@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../ui/Button";
-import dayjs from "dayjs";
+import { motion } from "framer-motion";
+import { PencilIcon } from "@heroicons/react/24/outline";
 
 export default function ProfileSection({
   avatarPreview,
@@ -11,120 +11,174 @@ export default function ProfileSection({
   handleEdit,
   handleSignOut
 }) {
+  const getInitials = () => {
+    if (userData?.firstName && userData?.lastName) {
+      return `${userData.firstName[0]}${userData.lastName[0]}`.toUpperCase();
+    }
+    return "TA"; // Default initials as shown in Figma
+  };
+
   return (
-    <div className="card bg-base-100 shadow-xl p-0 overflow-hidden">
-      <div className="flex flex-col items-center py-8 px-6">
-        {/* Avatar */}
-        <div className="avatar mb-4 relative flex items-center justify-center">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-base-100 rounded-lg p-8 border border-base-300 shadow-xl"
+    >
+      {/* Profile Header */}
+      <div className="flex flex-col items-center mb-8">
+        {/* Large Avatar */}
+        <div className="avatar mb-6 relative flex items-center justify-center">
           {avatarPreview ? (
             <img
               src={avatarPreview}
               alt="avatar"
-              className="w-20 h-20 rounded-full object-cover"
+              className="w-24 h-24 rounded-full object-cover"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-primary text-base-100 flex items-center justify-center text-3xl font-bold">
-              <span className="flex items-center justify-center w-full h-full">{userData?.firstName?.[0] || "U"}{userData?.lastName?.[0] || "N"}</span>
+            <div className="w-24 h-24 rounded-full bg-primary text-primary-content flex items-center justify-center text-3xl font-bold">
+              <span className="flex items-center justify-center w-full h-full">{getInitials()}</span>
             </div>
           )}
-          <Button
-            className="btn-xs btn-circle btn-ghost absolute bottom-0 right-0 flex items-center justify-center"
-            onClick={() => avatarInputRef.current?.click()}
-            title="Change Avatar"
-            aria-label="Edit Avatar"
-            type="button"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-2.828 1.172H7v-2a4 4 0 011.172-2.828z" /></svg>
-          </Button>
-          <input
-            type="file"
-            accept="image/*"
-            ref={avatarInputRef}
-            className="hidden"
-            onChange={onAvatarChange}
-          />
         </div>
-        <h2 className="text-2xl font-bold mb-1 flex items-center gap-2">
-          {userData?.firstName} {userData?.lastName}
-          <span className={`badge badge-sm ${status === "active" ? "badge-success" : "badge-warning"}`}>{status}</span>
-        </h2>
-        <span className="badge badge-outline badge-lg mb-2">
-          {userData?.profession || "Profession not set"}
-        </span>
-        <span className="text-base-content/70 mb-4">{userData?.email}</span>
-        <div className="divider my-2" />
-        <div className="w-full grid grid-cols-2 gap-4 text-left mb-2">
+        
+        {/* Name and Status */}
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-bold text-base-content mb-2 flex items-center justify-center gap-3">
+            {userData?.firstName && userData?.lastName 
+              ? `${userData.firstName} ${userData.lastName}` 
+              : "Tiwalade Adedeji"}
+            <span className="bg-primary text-primary-content text-xs px-2 py-1 rounded-full font-medium">
+              {status || "active"}
+            </span>
+          </h2>
+          
+          {/* Profession Badge */}
+          <div className="bg-base-200 text-base-content border border-base-300 px-4 py-2 rounded-lg inline-block mb-3">
+            <span className="font-medium">
+              {userData?.profession || "Content Strategist"}
+            </span>
+          </div>
+          
+          {/* Email */}
+          <p className="text-base-content/70 text-sm">
+            {userData?.email || "ddejilade22@gmail.com"}
+          </p>
+        </div>
+      </div>
+
+      {/* Profile Details */}
+      <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="space-y-4">
           <div>
-            <span className="font-semibold text-base-content/80">First Name</span>
-            <div className="text-base-content">{userData?.firstName}</div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">First Name:</span>
+            <span className="text-base-content">
+              {userData?.firstName || "Tiwalade"}
+            </span>
           </div>
           <div>
-            <span className="font-semibold text-base-content/80">Last Name</span>
-            <div className="text-base-content">{userData?.lastName}</div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Email:</span>
+            <span className="text-base-content">
+              {userData?.email || "ddejilade22@gmail.com"}
+            </span>
           </div>
-          <div className="col-span-2">
-            <span className="font-semibold text-base-content/80">Email</span>
-            <div className="text-base-content">{userData?.email}</div>
+          <div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Phone:</span>
+            <span className="text-base-content">
+              {userData?.phone || "-"}
+            </span>
           </div>
-          <div className="col-span-2">
-            <span className="font-semibold text-base-content/80">Phone</span>
-            <div className="text-base-content">{userData?.phone || "-"}</div>
+          <div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Address:</span>
+            <span className="text-base-content">
+              {userData?.address || "-"}
+            </span>
           </div>
-          <div className="col-span-2">
-            <span className="font-semibold text-base-content/80">Address</span>
-            <div className="text-base-content">{userData?.address || "-"}</div>
+        </div>
+        
+        <div className="space-y-4">
+          <div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Last Name:</span>
+            <span className="text-base-content">
+              {userData?.lastName || "Adedeji"}
+            </span>
           </div>
-          <div className="col-span-2">
-            <span className="font-semibold text-base-content/80">Bio</span>
-            <div className="text-base-content">{userData?.bio || "-"}</div>
+          <div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Profession:</span>
+            <span className="text-base-content">
+              {userData?.profession || "Content Strategist"}
+            </span>
           </div>
-          <div className="col-span-2 flex gap-2 items-center">
+          <div>
+            <span className="text-base-content/60 text-sm font-medium block mb-1">Bio:</span>
+            <span className="text-base-content">
+              {userData?.bio || "-"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Social Links */}
+      {(userData?.twitter || userData?.linkedin) && (
+        <div className="mb-8">
+          <h3 className="text-base-content/60 text-sm font-medium mb-3">Social Links</h3>
+          <div className="flex gap-3">
             {userData?.twitter && (
-              <Button
-                as="a"
+              <a
                 href={userData.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-xs btn-info"
+                className="bg-info hover:bg-info-focus text-info-content px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 Twitter
-              </Button>
+              </a>
             )}
             {userData?.linkedin && (
-              <Button
-                as="a"
+              <a
                 href={userData.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-xs btn-primary"
+                className="bg-info hover:bg-info-focus text-info-content px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
               >
                 LinkedIn
-              </Button>
+              </a>
             )}
           </div>
         </div>
-        <div className="w-full text-xs text-base-content/50 mt-2 mb-2">
-          Account created: {userData?.createdAt
-            ? dayjs(userData.createdAt).format("MMMM D, YYYY")
-            : "-"}
-        </div>
-        <div className="flex gap-2 w-full mt-4">
-          <Button
-            className="btn-outline btn-primary w-1/2"
-            onClick={handleEdit}
-            type="button"
-          >
-            Edit Profile
-          </Button>
-        </div>
-        <Button
-          className="btn-outline btn-error mt-4 w-full"
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex gap-4">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={handleEdit}
+          className="flex-1 bg-primary hover:bg-primary-focus text-primary-content px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2"
+          type="button"
+        >
+          <PencilIcon className="w-4 h-4" />
+          Edit Profile
+        </motion.button>
+        
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={handleSignOut}
+          className="flex-1 bg-error hover:bg-error-focus text-error-content px-6 py-3 rounded-lg font-medium transition-all duration-200"
           type="button"
         >
           Sign Out
-        </Button>
+        </motion.button>
       </div>
-    </div>
+
+      {/* Hidden file input for avatar */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={avatarInputRef}
+        className="hidden"
+        onChange={onAvatarChange}
+      />
+    </motion.div>
   );
 }

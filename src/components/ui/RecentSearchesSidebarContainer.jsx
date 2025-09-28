@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import RecentSearchesSidebar from "./RecentSearchesSidebar";
 
@@ -8,7 +9,7 @@ export default function RecentSearchesSidebarContainer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         setSearches([]);
         setLoading(false);

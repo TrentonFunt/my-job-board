@@ -1,4 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
+import { motion as Motion } from "framer-motion";
 import Button from "../ui/Button";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, Transition } from '@headlessui/react';
 import AdminJobsPagination from "./AdminJobsPagination";
@@ -218,13 +219,14 @@ export default function AdminJobsPanel() {
   if (loading || roleLoading) {
     return (
       <div className="flex justify-center items-center h-32">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+        <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <span className="ml-4 text-base-content/70">Loading jobs...</span>
       </div>
     );
   }
   if (!isAdmin) {
     return (
-      <div className="alert alert-error shadow-lg mt-8">
+      <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg">
         <span>Access denied. Admins only.</span>
       </div>
     );
@@ -299,30 +301,51 @@ export default function AdminJobsPanel() {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Admin: Manage Featured Jobs</h2>
-      {/* DaisyUI alerts for status messages */}
+    <div className="space-y-6">
+      <Motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-base-100 rounded-lg p-6 border border-base-300 shadow-xl"
+      >
+        <h2 className="text-2xl font-bold text-base-content mb-6">Admin: Manage Featured Jobs</h2>
+      
+      {/* Status messages */}
       {success && (
-        <div className="alert alert-success shadow-lg mb-4">
+        <Motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-lg mb-4"
+        >
           <span>{success}</span>
-        </div>
+        </Motion.div>
       )}
       {error && (
-        <div className="alert alert-error shadow-lg mb-4">
+        <Motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4"
+        >
           <span>{error}</span>
-        </div>
+        </Motion.div>
       )}
+      
       {/* Search and filter controls */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6 max-w-4xl">
         <input
           type="text"
-          className="input input-bordered w-full md:w-1/2"
+          id="admin-job-search"
+          name="jobSearch"
+          className="flex-1 max-w-md bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           placeholder="Search by job title or company"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          autoComplete="off"
         />
         <select
-          className="select select-bordered w-full md:w-1/3"
+          id="admin-job-filter"
+          name="jobFilter"
+          className="w-full md:w-48 bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           value={filterFeatured}
           onChange={e => setFilterFeatured(e.target.value)}
         >
@@ -332,25 +355,111 @@ export default function AdminJobsPanel() {
         </select>
       </div>
       {role === "admin" || role === "editor" ? (
-        <form className="card bg-base-100 border border-base-300 shadow p-4 mb-8 flex flex-col gap-3" onSubmit={handleCreateJob}>
-          <h3 className="text-lg font-semibold mb-2">Add New Job</h3>
-          <input id="job-title" name="title" value={form.title} onChange={handleFormChange} className="input input-bordered" placeholder="Job Title" required autoComplete="off" />
-          {formErrors.title && <span className="text-error text-xs">{formErrors.title}</span>}
-          <input id="company-name" name="company_name" value={form.company_name} onChange={handleFormChange} className="input input-bordered" placeholder="Company Name" required autoComplete="organization" />
-          {formErrors.company_name && <span className="text-error text-xs">{formErrors.company_name}</span>}
-          <input id="job-location" name="location" value={form.location} onChange={handleFormChange} className="input input-bordered" placeholder="Location" autoComplete="address-level2" />
-          <input id="job-slug" name="slug" value={form.slug} onChange={handleFormChange} className="input input-bordered" placeholder="Slug (unique)" autoComplete="off" />
-          <input id="job-application-link" name="application_link" value={form.application_link} onChange={handleFormChange} className="input input-bordered" placeholder="Application Link (URL)" autoComplete="url" />
-          {formErrors.application_link && <span className="text-error text-xs">{formErrors.application_link}</span>}
-          <textarea id="job-description" name="description" value={form.description} onChange={handleFormChange} className="textarea textarea-bordered" placeholder="Description" rows={3} required />
-          <input id="job-tags" name="tags" value={form.tags} onChange={handleFormChange} className="input input-bordered" placeholder="Tags (comma separated)" autoComplete="off" />
-          <label className="flex items-center gap-2" htmlFor="job-featured">
-            <input id="job-featured" type="checkbox" name="featured" checked={form.featured} onChange={handleFormChange} className="checkbox" />
-            <span>Featured</span>
-          </label>
-      <Button className="btn-primary rounded mt-2" type="submit" disabled={creating}>
-        {creating ? <span className="loading loading-spinner loading-xs"></span> : "Add Job"}
-      </Button>
+        <form className="bg-base-200 border border-base-300 rounded-lg p-6 mb-8 max-w-2xl" onSubmit={handleCreateJob}>
+          <h3 className="text-lg font-semibold mb-4 text-base-content">Add New Job</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <input 
+                id="job-title" 
+                name="title" 
+                value={form.title} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Job Title" 
+                required 
+                autoComplete="off" 
+              />
+              {formErrors.title && <span className="text-red-400 text-xs">{formErrors.title}</span>}
+            </div>
+            <div>
+              <input 
+                id="company-name" 
+                name="company_name" 
+                value={form.company_name} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Company Name" 
+                required 
+                autoComplete="organization" 
+              />
+              {formErrors.company_name && <span className="text-error text-xs">{formErrors.company_name}</span>}
+            </div>
+            <div>
+              <input 
+                id="job-location" 
+                name="location" 
+                value={form.location} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Location" 
+                autoComplete="address-level2" 
+              />
+            </div>
+            <div>
+              <input 
+                id="job-slug" 
+                name="slug" 
+                value={form.slug} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Slug (unique)" 
+                autoComplete="off" 
+              />
+            </div>
+            <div>
+              <input 
+                id="job-application-link" 
+                name="application_link" 
+                value={form.application_link} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Application Link (URL)" 
+                autoComplete="url" 
+              />
+              {formErrors.application_link && <span className="text-error text-xs">{formErrors.application_link}</span>}
+            </div>
+            <div className="md:col-span-2">
+              <textarea 
+                id="job-description" 
+                name="description" 
+                value={form.description} 
+                onChange={handleFormChange} 
+                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none" 
+                placeholder="Description" 
+                rows={3} 
+                required 
+              />
+            </div>
+            <div>
+              <input 
+                id="job-tags" 
+                name="tags" 
+                value={form.tags} 
+                onChange={handleFormChange} 
+                className="w-full bg-base-100 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+                placeholder="Tags (comma separated)" 
+                autoComplete="off" 
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-2 cursor-pointer" htmlFor="job-featured">
+                <input 
+                  id="job-featured" 
+                  type="checkbox" 
+                  name="featured" 
+                  checked={form.featured} 
+                  onChange={handleFormChange} 
+                  className="checkbox checkbox-primary" 
+                />
+                <span className="text-base-content">Featured</span>
+              </label>
+            </div>
+          </div>
+          <div className="mt-6">
+            <Button className="btn-primary w-full md:w-auto" type="submit" disabled={creating}>
+              {creating ? <span className="loading loading-spinner loading-xs"></span> : "Add Job"}
+            </Button>
+          </div>
         </form>
       ) : null}
       {filteredJobs.length === 0 ? (
@@ -513,6 +622,7 @@ export default function AdminJobsPanel() {
           </div>
         </Dialog>
       </Transition>
+      </Motion.div>
     </div>
   );
 }

@@ -8,7 +8,14 @@ import AccountPage from "../pages/AccountPage";
 import AboutPage from "../pages/AboutPage";
 import ContactPage from "../pages/ContactPage";
 import AdminPage from "../pages/AdminPage";
+import EmployerDashboard from "../pages/EmployerDashboard";
+import BlogPage from "../pages/BlogPage";
+import BlogPostPage from "../pages/BlogPostPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import EmailVerificationPage from "../pages/EmailVerificationPage";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 import { createBrowserRouter } from "react-router";
+import NotFoundPage from "../pages/NotFoundPage";
 
 
 export const routes = createBrowserRouter([
@@ -30,7 +37,11 @@ export const routes = createBrowserRouter([
       },
       {
         path: "account",
-        element: <AccountPage />
+        element: (
+          <ProtectedRoute>
+            <AccountPage />
+          </ProtectedRoute>
+        )
       },
       {
         path: "signup",
@@ -50,8 +61,40 @@ export const routes = createBrowserRouter([
       },
       {
         path: "admin",
-        element: <AdminPage />
+        element: (
+          <ProtectedRoute>
+            <AdminPage />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "employer-dashboard",
+        element: (
+          <ProtectedRoute>
+            <EmployerDashboard />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: "blog",
+        element: <BlogPage />
+      },
+      {
+        path: "blog/:id",
+        element: <BlogPostPage />
+      },
+      {
+        path: "email-verification",
+        element: <EmailVerificationPage />
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />
       }
     ]
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />
   }
 ])
