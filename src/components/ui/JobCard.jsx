@@ -1,13 +1,13 @@
 import { Link } from "react-router";
 import Button from "./Button";
 import { useState, useEffect } from "react";
-import { db, auth } from "../../firebase";
-import { doc, setDoc, deleteDoc, getDoc, addDoc, collection } from "firebase/firestore";
+import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { MapPinIcon, CurrencyDollarIcon, TagIcon, HeartIcon, BookmarkIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { HeartIcon as HeartSolidIcon, BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, CurrencyDollarIcon, TagIcon, BookmarkIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import { isJobSaved, toggleSaveJob, trackApplication } from "../../services/savedJobs";
 
 function stripHTML(html) {
   return html.replace(/<[^>]+>/g, "");
@@ -31,9 +31,8 @@ export default function JobCard({ title, company, description, slug, location, s
         setSaved(false);
         return;
       }
-      const docRef = doc(db, "users", user.uid, "savedJobs", slug);
-      const docSnap = await getDoc(docRef);
-      setSaved(docSnap.exists());
+      const isSaved = await isJobSaved(user.uid, slug);
+      setSaved(isSaved);
     }
     checkSaved();
   }, [slug, user]);
@@ -46,15 +45,14 @@ export default function JobCard({ title, company, description, slug, location, s
     
     setIsLoading(true);
     try {
-      const docRef = doc(db, "users", user.uid, "savedJobs", slug);
-      if (!saved) {
-        await setDoc(docRef, { title, company, description, slug });
-        setSaved(true);
-        toast.success("Job saved successfully!");
+      const jobData = { title, company, description, slug };
+      const result = await toggleSaveJob(user.uid, jobData, saved);
+      
+      if (result.success) {
+        setSaved(result.saved);
+        toast.success(result.saved ? "Job saved successfully!" : "Job removed from saved");
       } else {
-        await deleteDoc(docRef);
-        setSaved(false);
-        toast.success("Job removed from saved");
+        toast.error(result.error || "Failed to save job");
       }
     } catch (err) {
       console.error("Failed to save job:", err);
@@ -72,8 +70,7 @@ export default function JobCard({ title, company, description, slug, location, s
     
     setIsApplying(true);
     try {
-      const applicationsRef = collection(db, "users", user.uid, "applications");
-      await addDoc(applicationsRef, {
+      const applicationData = {
         company: company,
         position: title,
         location: location,
@@ -82,8 +79,15 @@ export default function JobCard({ title, company, description, slug, location, s
         appliedDate: new Date(),
         status: "APPLIED",
         notes: `Applied via ${source || 'Role Rocket'}`
-      });
-      toast.success("Application tracked! Check your Application Tracker.");
+      };
+      
+      const result = await trackApplication(user.uid, applicationData);
+      
+      if (result.success) {
+        toast.success("Application tracked! Check your Application Tracker.");
+      } else {
+        toast.error(result.error || "Failed to track application");
+      }
     } catch (err) {
       console.error("Failed to track application:", err);
       toast.error("Failed to track application");
