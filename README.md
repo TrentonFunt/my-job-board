@@ -4,14 +4,14 @@
 
 ### A Modern Full-Stack Job Board Platform
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](https://my-job-board-phi.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](https://my-job-board-peach.vercel.app)
 [![React](https://img.shields.io/badge/React-19.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![Firebase](https://img.shields.io/badge/Firebase-12.1-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
 **Role Rocket** is a production-ready job board application connecting job seekers with employers. Built with modern React patterns, real-time Firebase integration, and a focus on accessibility and performance.
 
-[Live Demo](https://my-job-board-phi.vercel.app) · [Report Bug](https://github.com/TrentonFunt/my-job-board/issues) · [Request Feature](https://github.com/TrentonFunt/my-job-board/issues)
+[Live Demo](https://my-job-board-peach.vercel.app) · [Report Bug](https://github.com/TrentonFunt/my-job-board/issues) · [Request Feature](https://github.com/TrentonFunt/my-job-board/issues)
 
 </div>
 
