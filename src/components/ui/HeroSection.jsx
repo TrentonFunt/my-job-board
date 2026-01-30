@@ -98,49 +98,114 @@ const HeroSection = ({ onSearch }) => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative"
+            className="relative hidden lg:block"
+            aria-hidden="true"
           >
-            <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px]">
+            <div className="relative w-full h-[500px]">
               {/* Main Illustration Container */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl backdrop-blur-sm border border-base-300/50 p-4 sm:p-6 lg:p-8">
-                {/* Person Illustration */}
-                <div className="flex items-center justify-center h-full">
-                  <div className="relative">
-                    {/* Person Figure */}
-                    <div className="w-32 h-32 bg-gradient-to-br from-primary to-primary-focus rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <div className="w-24 h-24 bg-base-100 rounded-full flex items-center justify-center">
-                        <span className="text-2xl">👨‍💻</span>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl backdrop-blur-sm border border-base-300/50 p-8 overflow-hidden">
+                
+                {/* Abstract Job Search Visualization */}
+                <div className="flex flex-col items-center justify-center h-full gap-6">
+                  
+                  {/* Search/Profile Card */}
+                  <motion.div 
+                    className="w-64 bg-base-100 rounded-xl shadow-lg p-4 border border-base-300"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <div className="h-3 bg-base-300 rounded w-24 mb-2"></div>
+                        <div className="h-2 bg-base-200 rounded w-16"></div>
                       </div>
                     </div>
-                    
-                    {/* Laptop */}
-                    <div className="w-40 h-24 bg-base-300 rounded-lg mx-auto relative">
-                      <div className="absolute inset-2 bg-base-200 rounded flex items-center justify-center">
-                        <div className="w-8 h-8 bg-primary rounded"></div>
-                      </div>
+                    <div className="space-y-2">
+                      <div className="h-2 bg-base-200 rounded w-full"></div>
+                      <div className="h-2 bg-base-200 rounded w-3/4"></div>
                     </div>
-                    
-                    {/* Plant */}
-                    <div className="absolute -right-4 top-8 w-8 h-12 bg-primary rounded-t-full"></div>
-                    <div className="absolute -right-2 top-6 w-4 h-4 bg-primary/70 rounded-full"></div>
+                  </motion.div>
+
+                  {/* Connection Lines */}
+                  <svg className="w-32 h-16 text-primary/30" viewBox="0 0 128 64">
+                    <motion.path
+                      d="M64 0 L32 32 L64 64 M64 0 L96 32 L64 64"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeDasharray="4 4"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                  </svg>
+
+                  {/* Job Cards Row */}
+                  <div className="flex gap-4">
+                    {[
+                      { icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z", color: "primary", delay: 0 },
+                      { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", color: "secondary", delay: 0.2 },
+                      { icon: "M13 10V3L4 14h7v7l9-11h-7z", color: "accent", delay: 0.4 }
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className={`w-16 h-16 bg-${item.color}/20 rounded-xl flex items-center justify-center border border-${item.color}/30`}
+                        animate={{ 
+                          y: [0, -6, 0],
+                          scale: [1, 1.05, 1]
+                        }}
+                        transition={{ 
+                          duration: 3, 
+                          repeat: Infinity, 
+                          ease: "easeInOut",
+                          delay: item.delay 
+                        }}
+                      >
+                        <svg className={`w-8 h-8 text-${item.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
+                        </svg>
+                      </motion.div>
+                    ))}
                   </div>
+
+                  {/* Success Badge */}
+                  <motion.div 
+                    className="flex items-center gap-2 bg-success/20 text-success px-4 py-2 rounded-full border border-success/30"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-sm font-medium">Your Match Found!</span>
+                  </motion.div>
                 </div>
                 
-                {/* Floating Elements */}
+                {/* Floating Decorative Elements */}
                 <motion.div
-                  animate={{ y: [-10, 10, -10] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-8 left-8 w-4 h-4 bg-primary/70 rounded-full"
+                  animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-8 left-8 w-4 h-4 bg-primary/50 rounded-full blur-sm"
                 />
                 <motion.div
-                  animate={{ y: [10, -10, 10] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-16 right-12 w-3 h-3 bg-secondary/70 rounded-full"
+                  animate={{ y: [10, -10, 10], x: [5, -5, 5] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-20 right-12 w-3 h-3 bg-secondary/50 rounded-full blur-sm"
                 />
                 <motion.div
                   animate={{ y: [-5, 15, -5] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-12 left-12 w-2 h-2 bg-info/70 rounded-full"
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute bottom-16 left-16 w-2 h-2 bg-accent/50 rounded-full blur-sm"
+                />
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute bottom-24 right-8 w-6 h-6 bg-info/30 rounded-full blur-md"
                 />
               </div>
             </div>

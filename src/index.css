@@ -1,13 +1,158 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* Ensure full viewport utilization */
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
 html, body {
   width: 100%;
   overflow-x: hidden;
 }
 
-/* Responsive utilities */
+* {
+  box-sizing: border-box;
+}
+
+/* ============================================================================
+   DAISYUI THEME CONFIGURATION
+   Using CSS custom properties to properly extend DaisyUI
+   ============================================================================ */
+
+:root {
+  /* Role Rocket Brand Colors */
+  --brand-green: #10b981;
+  --brand-green-dark: #059669;
+  --brand-purple: #8b5cf6;
+  --brand-purple-dark: #7c3aed;
+}
+
+/* ============================================================================
+   LIGHT THEME
+   ============================================================================ */
+
+[data-theme="light"],
+.light {
+  /* Custom properties for backwards compatibility */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --border-color: #e2e8f0;
+}
+
+/* ============================================================================
+   DARK THEME
+   ============================================================================ */
+
+[data-theme="dark"],
+.dark {
+  /* Custom properties for backwards compatibility */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --border-color: #334155;
+}
+
+/* ============================================================================
+   BRAND GRADIENT
+   ============================================================================ */
+
+.role-rocket-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================================
+   ENHANCED CARD STYLES (Theme-aware)
+   ============================================================================ */
+
+.card-modern {
+  background-color: var(--fallback-b1, oklch(var(--b1)));
+  border: 1px solid var(--fallback-b3, oklch(var(--b3)));
+  border-radius: var(--rounded-box, 0.75rem);
+  transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--fallback-p, oklch(var(--p)));
+}
+
+[data-theme="dark"] .card-modern:hover,
+.dark .card-modern:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================================
+   ENHANCED BUTTON STYLES
+   ============================================================================ */
+
+.btn-primary-modern {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary-modern:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   FOCUS STATES (Accessibility)
+   ============================================================================ */
+
+/* Enhanced focus ring for all interactive elements */
+.focus-ring {
+  transition: box-shadow 0.2s ease, outline 0.2s ease;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--fallback-p, #10b981);
+  outline-offset: 2px;
+}
+
+/* Button focus states */
+.btn:focus-visible {
+  outline: 2px solid var(--fallback-p, #10b981);
+  outline-offset: 2px;
+}
+
+/* Input focus states */
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid var(--fallback-p, #10b981);
+  outline-offset: 0;
+  border-color: var(--fallback-p, #10b981);
+}
+
+/* Card focus states (for keyboard navigation) */
+.card:focus-visible {
+  outline: 2px solid var(--fallback-p, #10b981);
+  outline-offset: 2px;
+}
+
+/* Interactive element focus */
+[tabindex="0"]:focus-visible {
+  outline: 2px solid var(--fallback-p, #10b981);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   RESPONSIVE UTILITIES
+   ============================================================================ */
+
 @media (max-width: 640px) {
   .container {
     padding-left: 1rem;
@@ -25,218 +170,109 @@ html, body {
   }
 }
 
-/* Remove any default margins/padding that might constrain layout */
+/* ============================================================================
+   REDUCED MOTION SUPPORT (Accessibility)
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fallback-b2, #f8fafc);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fallback-b3, #e2e8f0);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fallback-n, #64748b);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track,
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* Firefox scrollbar */
 * {
-  box-sizing: border-box;
+  scrollbar-width: thin;
 }
 
-/* Ensure containers can expand to full width */
-.container {
-  max-width: none !important;
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #10b981;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s ease;
 }
 
-/* Custom CSS Variables for Role Rocket Branding */
-:root {
-  --primary-green: #10b981;
-  --primary-green-dark: #059669;
-  --accent-purple: #8b5cf6;
-  --accent-purple-dark: #7c3aed;
+.skip-link:focus {
+  top: 0;
 }
 
-/* DaisyUI Theme Customization for Better Text Contrast */
-.light {
-  --fallback-bc: #1f2937; /* Dark text for light mode */
-  --fallback-b1: #ffffff; /* Pure white background */
-  --fallback-b2: #f8fafc; /* Very light gray background */
-  --fallback-b3: #e2e8f0; /* Light gray background */
-  --fallback-p: #10b981; /* Primary color */
-  --fallback-pc: #ffffff; /* Primary content color */
-  --fallback-s: #8b5cf6; /* Secondary color */
-  --fallback-sc: #ffffff; /* Secondary content color */
-  --fallback-er: #ef4444; /* Error color */
-  --fallback-erc: #ffffff; /* Error content color */
-  --fallback-su: #10b981; /* Success color */
-  --fallback-suc: #ffffff; /* Success content color */
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* Custom job card styling for better light mode appearance */
-.light .card {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.light .card:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Light mode tag styling */
-.light .card .bg-base-200 {
-  background-color: #f1f5f9 !important;
-  color: #475569 !important;
-}
-
-.light .card .text-primary {
-  color: #10b981 !important;
-}
-
-/* Ensure text colors work properly in light mode */
-.light .text-base-content {
-  color: #1f2937 !important;
-}
-
-.light .text-base-content\/70 {
-  color: #6b7280 !important;
-}
-
-.light .text-base-content\/60 {
-  color: #9ca3af !important;
-}
-
-.light .text-base-content\/50 {
-  color: #d1d5db !important;
-}
-
-/* Ensure sidebar and main content areas are properly styled in light mode */
-.light .bg-base-100 {
-  background-color: #ffffff !important;
-}
-
-.light .bg-base-200 {
-  background-color: #f8fafc !important;
-}
-
-.light .bg-base-300 {
-  background-color: #e2e8f0 !important;
-}
-
-.light .border-base-300 {
-  border-color: #e2e8f0 !important;
-}
-
-.dark {
-  --fallback-bc: #f8fafc; /* Light text for dark mode */
-  --fallback-b1: #0f172a; /* Dark background */
-  --fallback-b2: #1e293b; /* Dark secondary background */
-  --fallback-b3: #334155; /* Dark tertiary background */
-  --fallback-p: #10b981; /* Primary color */
-  --fallback-pc: #ffffff; /* Primary content color */
-  --fallback-s: #8b5cf6; /* Secondary color */
-  --fallback-sc: #ffffff; /* Secondary content color */
-  --fallback-er: #ef4444; /* Error color */
-  --fallback-erc: #ffffff; /* Error content color */
-  --fallback-su: #10b981; /* Success color */
-  --fallback-suc: #ffffff; /* Success content color */
-}
-
-/* Light theme variables */
-.light {
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-card: #ffffff;
-  --border-color: #d1d5db;
-  --bg-slate-900: #ffffff;
-  --bg-slate-800: #f8fafc;
-  --bg-slate-700: #f1f5f9;
-  --text-white: #1f2937;
-  --text-slate-300: #64748b;
-  --text-slate-400: #94a3b8;
-  --border-slate-700: #d1d5db;
-  --border-slate-600: #9ca3af;
-}
-
-/* Dark theme variables */
-.dark {
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-card: #334155;
-  --border-color: #374151;
-  --bg-slate-900: #0f172a;
-  --bg-slate-800: #1e293b;
-  --bg-slate-700: #334155;
-  --text-white: #ffffff;
-  --text-slate-300: #cbd5e1;
-  --text-slate-400: #94a3b8;
-  --border-slate-700: #374151;
-  --border-slate-600: #4b5563;
-}
-
-/* Custom gradient for Role Rocket logo */
-.role-rocket-gradient {
-  background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-purple) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Enhanced button styles */
-.btn-primary-modern {
-  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.btn-primary-modern:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
-}
-
-/* Enhanced card styles */
-.card-modern {
-  background: var(--bg-card);
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.card-modern:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  border-color: var(--primary-green);
-}
-
-/* Theme-aware background classes */
-.bg-slate-900 {
-  background-color: var(--bg-slate-900) !important;
-}
-
-.bg-slate-800 {
-  background-color: var(--bg-slate-800) !important;
-}
-
-.bg-slate-700 {
-  background-color: var(--bg-slate-700) !important;
-}
-
-.text-white {
-  color: var(--text-white) !important;
-}
-
-.text-slate-300 {
-  color: var(--text-slate-300) !important;
-}
-
-.text-slate-400 {
-  color: var(--text-slate-400) !important;
-}
-
-.border-slate-700 {
-  border-color: var(--border-slate-700) !important;
-}
-
-.border-slate-600 {
-  border-color: var(--border-slate-600) !important;
-}
-
-/* Additional border utilities for better visibility */
-.border-slate-500 {
-  border-color: #6b7280 !important;
-}
-
-.border-slate-400 {
-  border-color: #9ca3af !important;
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

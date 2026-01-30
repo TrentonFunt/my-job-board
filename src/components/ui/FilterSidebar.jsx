@@ -1,6 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+
+/**
+ * Focus trap hook for modal accessibility
+ * Keeps keyboard focus within the modal while it's open
+ */
+function useFocusTrap(isOpen) {
+  const containerRef = useRef(null);
+  const previousActiveElement = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Store the previously focused element
+    previousActiveElement.current = document.activeElement;
+
+    // Get all focusable elements within the container
+    const getFocusableElements = () => {
+      if (!containerRef.current) return [];
+      return containerRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+    };
+
+    // Focus the first focusable element
+    const focusableElements = getFocusableElements();
+    if (focusableElements.length > 0) {
+      setTimeout(() => focusableElements[0]?.focus(), 100);
+    }
+
+    // Handle tab key to trap focus
+    const handleKeyDown = (e) => {
+      if (e.key !== 'Tab') return;
+
+      const focusable = getFocusableElements();
+      if (focusable.length === 0) return;
+
+      const firstElement = focusable[0];
+      const lastElement = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to the previously focused element
+      previousActiveElement.current?.focus();
+    };
+  }, [isOpen]);
+
+  return containerRef;
+}
 
 const FilterSidebar = ({ 
   isOpen, 
@@ -85,6 +150,20 @@ const FilterSidebar = ({
     'Custom'
   ];
 
+  // Focus trap for accessibility
+  const sidebarRef = useFocusTrap(isOpen);
+
+  // Handle escape key to close sidebar
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -96,10 +175,15 @@ const FilterSidebar = ({
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 z-40"
             onClick={onClose}
+            aria-hidden="true"
           />
           
           {/* Sidebar */}
           <motion.div
+            ref={sidebarRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Filter jobs"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -109,10 +193,11 @@ const FilterSidebar = ({
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-base-content">Filters</h2>
+                <h2 className="text-xl font-bold text-base-content" id="filter-dialog-title">Filters</h2>
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-base-300 rounded-lg transition-colors duration-200"
+                  className="p-2 hover:bg-base-300 rounded-lg transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  aria-label="Close filters"
                 >
                   <XMarkIcon className="w-5 h-5 text-base-content/70" />
                 </button>
