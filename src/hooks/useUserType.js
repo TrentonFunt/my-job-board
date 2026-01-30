@@ -3,6 +3,17 @@ import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
+/**
+ * Custom hook to get the current user's type and profile data.
+ * Listens to auth state changes and fetches user document from Firestore.
+ * 
+ * @returns {{ userType: 'candidate' | 'employer' | null, userData: Object | null, loading: boolean }}
+ * 
+ * @example
+ * const { userType, userData, loading } = useUserType();
+ * if (loading) return <Spinner />;
+ * if (userType === 'employer') return <EmployerDashboard data={userData} />;
+ */
 export default function useUserType() {
   const [userType, setUserType] = useState(null);
   const [userData, setUserData] = useState(null);

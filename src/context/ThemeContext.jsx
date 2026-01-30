@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import ThemeContext from './ThemeContextInstance';
 
-
+/**
+ * Theme Provider Component.
+ * Manages light/dark theme state with localStorage persistence.
+ * Applies theme to document root and DaisyUI data-theme attribute.
+ * 
+ * @param {{ children: React.ReactNode }} props
+ * @returns {JSX.Element}
+ * 
+ * @example
+ * <ThemeProvider>
+ *   <App />
+ * </ThemeProvider>
+ */
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     // Check localStorage first, then system preference
