@@ -1,149 +1,263 @@
 /**
  * @typedef {Object} Job
- * @property {string} slug
- * @property {string} title
- * @property {string} company_name
- * @property {string} [description]
- * @property {string} [location]
- * @property {number|null} [salary]
- * @property {string[]} [tags]
- * @property {string} [url]
- * @property {string} [source]
+ * @property {string} slug - Unique identifier for the job
+ * @property {string} title - Job title
+ * @property {string} company_name - Name of the hiring company
+ * @property {string} [description] - Job description (may contain HTML)
+ * @property {string} [location] - Job location
+ * @property {number|string|null} [salary] - Salary information
+ * @property {string[]} [tags] - Job tags/skills
+ * @property {string} [url] - External application URL
+ * @property {string} [source] - API source (arbeitnow, remotive, jobicy)
  */
+
+// ============================================================================
+// CACHING LAYER - Improves performance by reducing API calls
+// ============================================================================
+
+const CACHE_KEY = 'rolerocket_jobs_cache';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+/** @type {Job[] | null} */
+let memoryCache = null;
+let memoryCacheTimestamp = 0;
 
 /**
- * Fetch aggregated jobs from the Vercel edge function.
- * @param {AbortSignal} [signal]
+ * Get cached jobs from memory or localStorage
+ * @returns {{ jobs: Job[] | null, isStale: boolean }}
+ */
+function getCachedJobs() {
+  const now = Date.now();
+  
+  // Check memory cache first (fastest)
+  if (memoryCache && (now - memoryCacheTimestamp) < CACHE_DURATION) {
+    return { jobs: memoryCache, isStale: false };
+  }
+  
+  // Check localStorage (persists across refreshes)
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { jobs, timestamp } = JSON.parse(cached);
+      const isStale = (now - timestamp) >= CACHE_DURATION;
+      
+      // Update memory cache
+      memoryCache = jobs;
+      memoryCacheTimestamp = timestamp;
+      
+      return { jobs, isStale };
+    }
+  } catch (e) {
+    console.warn('Failed to read jobs cache:', e);
+  }
+  
+  return { jobs: null, isStale: true };
+}
+
+/**
+ * Save jobs to both memory and localStorage cache
+ * @param {Job[]} jobs - Jobs to cache
+ */
+function setCachedJobs(jobs) {
+  const now = Date.now();
+  
+  // Update memory cache
+  memoryCache = jobs;
+  memoryCacheTimestamp = now;
+  
+  // Persist to localStorage
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      jobs,
+      timestamp: now
+    }));
+  } catch (e) {
+    console.warn('Failed to write jobs cache:', e);
+  }
+}
+
+/**
+ * Clear the jobs cache (useful after posting a new job)
+ */
+export function clearJobsCache() {
+  memoryCache = null;
+  memoryCacheTimestamp = 0;
+  try {
+    localStorage.removeItem(CACHE_KEY);
+  } catch (e) {
+    console.warn('Failed to clear jobs cache:', e);
+  }
+}
+
+// ============================================================================
+// NORMALIZERS - Transform API responses to unified Job format
+// ============================================================================
+
+/**
+ * Normalize Arbeitnow API response to Job format
+ * @param {Array} list - Raw Arbeitnow jobs
+ * @returns {Job[]}
+ */
+const normalizeArbeitnow = (list = []) => list.map((j) => ({
+  source: 'arbeitnow',
+  slug: j.slug,
+  title: j.title,
+  company_name: j.company_name,
+  description: j.description,
+  location: j.location,
+  salary: j.salary ?? null,
+  tags: Array.isArray(j.tags) ? j.tags : [],
+  url: j.url,
+}));
+
+/**
+ * Normalize Remotive API response to Job format
+ * @param {Array} list - Raw Remotive jobs
+ * @returns {Job[]}
+ */
+const normalizeRemotive = (list = []) => list.map((j) => ({
+  source: 'remotive',
+  slug: `remotive-${j.id}`,
+  title: j.title,
+  company_name: j.company_name,
+  description: j.description,
+  location: j.candidate_required_location || '',
+  salary: j.salary || null,
+  tags: Array.isArray(j.tags) ? j.tags : [],
+  url: j.url,
+}));
+
+/**
+ * Normalize Jobicy API response to Job format
+ * @param {Array} list - Raw Jobicy jobs
+ * @returns {Job[]}
+ */
+const normalizeJobicy = (list = []) => list.map((j) => ({
+  source: 'jobicy',
+  slug: `jobicy-${j.id ?? j.slug ?? Math.random().toString(36).slice(2)}`,
+  title: j.title ?? j.jobTitle ?? '',
+  company_name: j.company_name ?? j.companyName ?? j.company?.name ?? '',
+  description: j.description ?? j.jobDescription ?? '',
+  location: j.candidate_required_location ?? j.location ?? '',
+  salary: j.salary ?? null,
+  tags: Array.isArray(j.tags) ? j.tags : (Array.isArray(j.jobTags) ? j.jobTags : []),
+  url: j.url ?? j.jobUrl ?? '',
+}));
+
+/**
+ * Remove duplicate jobs by slug
+ * @param {Job[]} jobs - Array of jobs
+ * @returns {Job[]}
+ */
+const dedupeBySlug = (jobs) => {
+  const seen = new Set();
+  return jobs.filter((j) => j?.slug && !seen.has(j.slug) && seen.add(j.slug));
+};
+
+// ============================================================================
+// API FETCHING - Fetch jobs from multiple sources
+// ============================================================================
+
+/**
+ * Fetch jobs directly from all API sources (browser-side)
+ * @param {AbortSignal} [signal] - Abort signal for cancellation
  * @returns {Promise<Job[]>}
  */
-export async function fetchAggregatedJobs(signal) {
-  // In local dev, aggregate directly in the browser to avoid Vite proxy overriding our Edge function
-  if (import.meta?.env?.DEV) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const [arbeitnowRes, remotiveRes, jobicyRes] = await Promise.allSettled([
-        fetch('/api/job-board-api', { headers: { accept: 'application/json' }, signal: controller.signal }),
-        fetch('https://remotive.com/api/remote-jobs', { headers: { accept: 'application/json' }, signal: controller.signal }),
-        fetch('https://jobicy.com/api/v2/remote-jobs', { headers: { accept: 'application/json' }, signal: controller.signal }),
-      ]);
-
-      const arbeitnowData = arbeitnowRes.status === 'fulfilled' && arbeitnowRes.value.ok ? await arbeitnowRes.value.json() : { data: [] };
-      const remotiveData = remotiveRes.status === 'fulfilled' && remotiveRes.value.ok ? await remotiveRes.value.json() : { jobs: [] };
-      const jobicyData = jobicyRes.status === 'fulfilled' && jobicyRes.value.ok ? await jobicyRes.value.json() : { jobs: [] };
-
-      const normalizeArbeitnow = (list = []) => list.map((j) => ({
-        source: 'arbeitnow',
-        slug: j.slug,
-        title: j.title,
-        company_name: j.company_name,
-        description: j.description,
-        location: j.location,
-        salary: j.salary ?? null,
-        tags: Array.isArray(j.tags) ? j.tags : [],
-        url: j.url,
-      }));
-      const normalizeRemotive = (list = []) => list.map((j) => ({
-        source: 'remotive',
-        slug: `remotive-${j.id}`,
-        title: j.title,
-        company_name: j.company_name,
-        description: j.description,
-        location: j.candidate_required_location || '',
-        salary: j.salary || null,
-        tags: Array.isArray(j.tags) ? j.tags : [],
-        url: j.url,
-      }));
-      const normalizeJobicy = (list = []) => list.map((j) => ({
-        source: 'jobicy',
-        slug: `jobicy-${j.id ?? j.slug ?? Math.random().toString(36).slice(2)}`,
-        title: j.title ?? j.jobTitle ?? '',
-        company_name: j.company_name ?? j.companyName ?? j.company?.name ?? '',
-        description: j.description ?? j.jobDescription ?? '',
-        location: j.candidate_required_location ?? j.location ?? '',
-        salary: j.salary ?? null,
-        tags: Array.isArray(j.tags) ? j.tags : (Array.isArray(j.jobTags) ? j.jobTags : []),
-        url: j.url ?? j.jobUrl ?? '',
-      }));
-      const dedupeBySlug = (jobs) => {
-        const seen = new Set();
-        return jobs.filter((j) => j?.slug && !seen.has(j.slug) && seen.add(j.slug));
-      };
-
-      return dedupeBySlug([
-        ...normalizeArbeitnow(arbeitnowData.data || []),
-        ...normalizeRemotive(remotiveData.jobs || []),
-        ...normalizeJobicy(jobicyData.jobs || jobicyData.data || []),
-      ]);
-    } finally {
-      clearTimeout(timeout);
-    }
-  }
+async function fetchFromAllSources(signal) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+  
+  // Use provided signal or internal controller
+  const effectiveSignal = signal || controller.signal;
+  
   try {
-    const res = await fetch('/api/job-board-api', {
-      headers: { 'accept': 'application/json' },
-      signal,
-    });
-    if (!res.ok) throw new Error('upstream');
-    const json = await res.json();
-    if (Array.isArray(json?.data)) {
-      const data = json.data.map((j) => ({
-        // If source missing, default to 'arbeitnow' (edge may pass-through during preview)
-        source: j.source || 'arbeitnow',
-        ...j,
-      }));
-      return data;
+    const [arbeitnowRes, remotiveRes, jobicyRes] = await Promise.allSettled([
+      fetch('/api/job-board-api', { 
+        headers: { accept: 'application/json' }, 
+        signal: effectiveSignal 
+      }),
+      fetch('https://remotive.com/api/remote-jobs', { 
+        headers: { accept: 'application/json' }, 
+        signal: effectiveSignal 
+      }),
+      fetch('https://jobicy.com/api/v2/remote-jobs', { 
+        headers: { accept: 'application/json' }, 
+        signal: effectiveSignal 
+      }),
+    ]);
+
+    const arbeitnowData = arbeitnowRes.status === 'fulfilled' && arbeitnowRes.value.ok 
+      ? await arbeitnowRes.value.json() 
+      : { data: [] };
+    const remotiveData = remotiveRes.status === 'fulfilled' && remotiveRes.value.ok 
+      ? await remotiveRes.value.json() 
+      : { jobs: [] };
+    const jobicyData = jobicyRes.status === 'fulfilled' && jobicyRes.value.ok 
+      ? await jobicyRes.value.json() 
+      : { jobs: [] };
+
+    return dedupeBySlug([
+      ...normalizeArbeitnow(arbeitnowData.data || []),
+      ...normalizeRemotive(remotiveData.jobs || []),
+      ...normalizeJobicy(jobicyData.jobs || jobicyData.data || []),
+    ]);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+/**
+ * Fetch aggregated jobs with caching support.
+ * Uses stale-while-revalidate pattern for optimal UX.
+ * 
+ * @param {AbortSignal} [signal] - Abort signal for cancellation
+ * @param {Object} [options] - Fetch options
+ * @param {boolean} [options.forceRefresh=false] - Bypass cache and fetch fresh data
+ * @returns {Promise<Job[]>}
+ */
+export async function fetchAggregatedJobs(signal, options = {}) {
+  const { forceRefresh = false } = options;
+  
+  // Check cache first (unless force refresh)
+  if (!forceRefresh) {
+    const { jobs: cachedJobs, isStale } = getCachedJobs();
+    
+    if (cachedJobs && !isStale) {
+      // Cache is fresh, return immediately
+      return cachedJobs;
     }
-    throw new Error('no-data');
-  } catch {
-    // Dev fallback: fetch sources directly (browser) and merge
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const [arbeitnowRes, remotiveRes] = await Promise.allSettled([
-        fetch('/api/job-board-api', { headers: { accept: 'application/json' }, signal: controller.signal }),
-        fetch('https://remotive.com/api/remote-jobs', { headers: { accept: 'application/json' }, signal: controller.signal }),
-      ]);
-
-      const arbeitnowData = arbeitnowRes.status === 'fulfilled' && arbeitnowRes.value.ok ? await arbeitnowRes.value.json() : { data: [] };
-      const remotiveData = remotiveRes.status === 'fulfilled' && remotiveRes.value.ok ? await remotiveRes.value.json() : { jobs: [] };
-
-      const normalizeArbeitnow = (list = []) => list.map((j) => ({
-        source: 'arbeitnow',
-        slug: j.slug,
-        title: j.title,
-        company_name: j.company_name,
-        description: j.description,
-        location: j.location,
-        salary: j.salary ?? null,
-        tags: Array.isArray(j.tags) ? j.tags : [],
-        url: j.url,
-      }));
-      const normalizeRemotive = (list = []) => list.map((j) => ({
-        source: 'remotive',
-        slug: `remotive-${j.id}`,
-        title: j.title,
-        company_name: j.company_name,
-        description: j.description,
-        location: j.candidate_required_location || '',
-        salary: j.salary || null,
-        tags: Array.isArray(j.tags) ? j.tags : [],
-        url: j.url,
-      }));
-      const dedupeBySlug = (jobs) => {
-        const seen = new Set();
-        return jobs.filter((j) => j?.slug && !seen.has(j.slug) && seen.add(j.slug));
-      };
-
-      const merged = dedupeBySlug([
-        ...normalizeArbeitnow(arbeitnowData.data || []),
-        ...normalizeRemotive(remotiveData.jobs || []),
-      ]);
-      return merged;
-    } finally {
-      clearTimeout(timeout);
+    
+    if (cachedJobs && isStale) {
+      // Return stale data immediately, refresh in background
+      fetchFromAllSources(signal)
+        .then(setCachedJobs)
+        .catch(err => console.warn('Background refresh failed:', err));
+      return cachedJobs;
     }
   }
+  
+  // No cache or force refresh - fetch fresh data
+  const jobs = await fetchFromAllSources(signal);
+  setCachedJobs(jobs);
+  return jobs;
+}
+
+/**
+ * Get a single job by slug from cache or fetch all jobs
+ * @param {string} slug - Job slug to find
+ * @returns {Promise<Job|null>}
+ */
+export async function getJobBySlug(slug) {
+  const { jobs: cachedJobs } = getCachedJobs();
+  
+  if (cachedJobs) {
+    const found = cachedJobs.find(j => j.slug === slug);
+    if (found) return found;
+  }
+  
+  // Not in cache, fetch all and search
+  const jobs = await fetchAggregatedJobs();
+  return jobs.find(j => j.slug === slug) || null;
 }
 
 
