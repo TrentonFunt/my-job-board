@@ -1,246 +1,214 @@
+<div align="center">
 
-# Role Rocket
+# 🚀 Role Rocket
 
+### A Modern Full-Stack Job Board Platform
 
-A modern, full-featured job board web application built with React, Vite, DaisyUI, Headless UI, Tailwind CSS, and Firebase.
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](https://my-job-board-phi.vercel.app)
+[![React](https://img.shields.io/badge/React-19.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
+[![Firebase](https://img.shields.io/badge/Firebase-12.1-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-## Recent Updates (Auguest &September 2025)
+**Role Rocket** is a production-ready job board application connecting job seekers with employers. Built with modern React patterns, real-time Firebase integration, and a focus on accessibility and performance.
 
-### 🚀 **Major Features & Improvements**
-- **Employer Dashboard**: Complete employer portal with job posting, editing, application management, and analytics
-- **Job Posting System**: Employers can post, edit, and manage their own jobs with full CRUD operations
-- **Application Management**: Track and manage job applications with status updates and bulk operations
-- **Enhanced Search**: Fixed hero section search functionality with proper state management and micro-interactions
-- **Micro-interactions**: Added comprehensive animations and micro-interactions throughout the employer dashboard
-- **Theme Consistency**: Full light/dark mode support with DaisyUI v5 theme system across all pages
-- **Responsive Design**: Complete responsive design implementation for all screen sizes
-- **Favicon Implementation**: Complete favicon set with proper meta tags and PWA support
+[Live Demo](https://my-job-board-phi.vercel.app) · [Report Bug](https://github.com/TrentonFunt/my-job-board/issues) · [Request Feature](https://github.com/TrentonFunt/my-job-board/issues)
 
-### 🎨 **UI/UX Enhancements**
-- **Modernized Homepage**: Redesigned homepage with improved layout and user experience
-- **Testimonials Carousel**: Added testimonials section with carousel for user feedback
-- **Personalized Recommendations**: Homepage features personalized job recommendations
-- **Consistent Button Component**: All buttons use custom `Button` component with microinteractions
-- **Admin Panel Consistency**: Unified styling across all admin features
-- **Enhanced Animations**: Framer Motion animations throughout the application
-- **Theme Toggle**: Back-to-top button and comprehensive theme switching
+</div>
 
-### 🔧 **Technical Improvements**
-- **Code Cleanup**: Removed unused files and optimized codebase structure
-- **ESLint Fixes**: Resolved all linting errors and warnings
-- **Build Optimization**: Production-ready build configuration for Vercel deployment
-- **Firebase Integration**: Enhanced Firestore collections for employer jobs and applications
-- **Form Validation**: Comprehensive form validation with accessibility improvements
-- **SEO Optimization**: Added meta tags, Open Graph, and Twitter Card support
-- **PWA Support**: Web app manifest and service worker ready configuration
+---
 
-### 📱 **Mobile & Accessibility**
-- **Responsive Design**: Optimized for all device sizes from mobile to desktop
-- **Touch Interactions**: Enhanced touch interactions for mobile devices
-- **Accessibility**: Proper form labels, ARIA attributes, and keyboard navigation
-- **Performance**: Optimized bundle size and loading performance
+## 📋 Table of Contents
 
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Technical Highlights](#-technical-highlights)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Screenshots](#-screenshots)
 
-## Features
+---
 
-### 👤 **User Features**
-- **User Authentication**: Sign up, sign in, and manage your account securely with Firebase Auth
-- **Job Search & Filtering**: Search jobs by title, location, company, tags, remote/onsite, and salary
-- **Recent Searches**: Sidebar displays your latest search terms, synced in real time with Firebase
-- **User Profile Summary**: Personalized welcome card on the homepage
-- **Saved Jobs**: Save and unsave jobs to your account (visible in job cards)
-- **Application Tracking**: Track your job applications with status updates
-- **Account Management**: Edit profile, change password, and view account details
-- **Theme Support**: Light and dark mode with system preference detection
+## 🎯 Overview
 
-### 🏢 **Employer Features**
-- **Employer Dashboard**: Complete portal for job management and application tracking
-- **Job Posting**: Create, edit, and manage job postings with rich descriptions
-- **Application Management**: View, filter, and manage job applications
-- **Bulk Operations**: Select and manage multiple jobs and applications at once
-- **Analytics & Insights**: View job performance metrics and application statistics
-- **Company Profile**: Manage company information and branding
-- **Real-time Updates**: Live updates for new applications and job status changes
+Role Rocket is a comprehensive job board platform designed to serve three distinct user types:
 
-### 🎨 **UI/UX Features**
-- **Responsive Design**: Optimized for all device sizes from mobile to desktop
-- **Modern Animations**: Framer Motion micro-interactions throughout the app
-- **Loading States**: DaisyUI spinners and skeleton loaders for all async operations
-- **Clean UI**: Unified styling with DaisyUI 5, Headless UI, and Tailwind CSS 4
-- **Accessibility**: Proper form labels, ARIA attributes, and keyboard navigation
-- **PWA Ready**: Web app manifest and service worker configuration
+| User Type | Capabilities |
+|-----------|-------------|
+| **Job Seekers** | Browse jobs, save favorites, track applications, manage profile |
+| **Employers** | Post jobs, manage applications, view analytics, track hiring pipeline |
+| **Administrators** | Moderate content, manage users, approve employer jobs, platform analytics |
 
+### What Makes This Project Stand Out
 
-### Admin Panel Features
+- **Real-World Complexity**: Multi-role authentication, job moderation workflows, aggregated job feeds from 3+ external APIs
+- **Production Quality**: Deployed on Vercel with proper error handling, loading states, and optimistic updates
+- **Modern React Patterns**: Hooks, Context API, code splitting, and component composition
+- **Accessibility First**: WCAG 2.1 AA compliant with focus trapping, keyboard navigation, and screen reader support
 
-- **Admin Dashboard**: Sidebar navigation for User Management, Jobs Panel, Analytics, Notifications, Settings, Feedback & Support
-- **Role-Based Access Control**: Admin, editor, and viewer roles for secure access
-- **User Management**: View, search, filter, and edit users (role/status) with Headless UI modal
-- **Jobs Panel**: Add, edit, delete, feature/unfeature jobs, bulk actions (bulk delete, bulk feature/unfeature), search/filter, and pagination
-- **Bulk Actions**: Select multiple jobs for bulk delete or feature/unfeature, with confirmation modal (Headless UI Dialog)
-- **Inline Validation**: Real-time inline validation for all job and user forms (required fields, valid URLs, etc.)
-- **Application Link**: Jobs support external application links, shown as 'Apply Now' buttons
-- **Slug & Tags**: Jobs support unique slugs and comma-separated tags for advanced filtering and search
-- **Pagination**: Admin jobs panel includes pagination for easier job management
-- **Role-Based UI**: UI actions and buttons are enabled/disabled based on user role (admin, editor, viewer)
-- **Profile Social Links**: Users can customize visibility of their Twitter and LinkedIn links in their profile
-- **Job Analytics**: View job stats (customizable)
-- **Notifications**: Send announcements to all users, save notifications to Firestore, view sent notifications
-- **Settings**: Update site branding and featured tags, save to Firestore
-- **Feedback & Support**: View user feedback, respond via modal, save responses to Firestore
-- **Consistent UI**: All admin features use DaisyUI 5, Headless UI, and the custom Button component for modern, accessible, and consistent design
-- **Wide Card Layouts**: Admin pages use wide, responsive cards for better usability
-- **Status Feedback**: DaisyUI alerts and spinners for all status messages
-- **Accessibility**: All form fields have proper `id` and `name` attributes for autofill/accessibility; all modals/dialogs use accessible Headless UI components
-- **Firestore Integration**: Jobs, users, notifications, feedback, and settings are stored in Firestore
+---
 
-## Project Structure
+## ✨ Key Features
 
-```
-my-job-board/
-├── public/
-│   ├── favicon.ico
-│   ├── favicon-16x16.png
-│   ├── favicon-32x32.png
-│   ├── apple-touch-icon.png
-│   ├── android-chrome-192x192.png
-│   ├── android-chrome-512x512.png
-│   └── site.webmanifest
-├── src/
-│   ├── components/
-│   │   ├── ui/
-│   │   │   ├── Button.jsx
-│   │   │   ├── JobCard.jsx
-│   │   │   ├── HeroSection.jsx
-│   │   │   ├── SearchAndFilter.jsx
-│   │   │   ├── Spinner.jsx
-│   │   │   ├── SuccessAlert.jsx
-│   │   │   ├── UserProfileSummary.jsx
-│   │   │   ├── ApplicationTracker.jsx
-│   │   │   ├── RecentApplications.jsx
-│   │   │   ├── BackToTopButton.jsx
-│   │   │   ├── ThemeToggle.jsx
-│   │   │   └── [other UI components]
-│   │   ├── account/
-│   │   │   ├── AccountSidebar.jsx
-│   │   │   ├── ChangePasswordSection.jsx
-│   │   │   ├── EditProfileModal.jsx
-│   │   │   ├── NotificationsSection.jsx
-│   │   │   ├── ProfileSection.jsx
-│   │   │   ├── SavedJobsSection.jsx
-│   │   │   └── SettingsSection.jsx
-│   │   ├── admin/
-│   │   │   ├── AdminJobsPanel.jsx
-│   │   │   ├── AdminPanelLayout.jsx
-│   │   │   ├── AdminUserManagement.jsx
-│   │   │   ├── AdminJobAnalytics.jsx
-│   │   │   ├── AdminNotifications.jsx
-│   │   │   ├── AdminSettings.jsx
-│   │   │   ├── AdminFeedbackSupport.jsx
-│   │   │   ├── AdminJobsBulkActions.jsx
-│   │   │   ├── AdminJobsPagination.jsx
-│   │   │   ├── AddSampleJobs.jsx
-│   │   │   └── useUserRole.js
-│   │   ├── homepage/
-│   │   │   ├── FeaturedJobs.jsx
-│   │   │   └── Testimonials.jsx
-│   │   ├── layout/
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Layout.jsx
-│   │   │   └── Navbar.jsx
-│   │   └── auth/
-│   │       └── ProtectedRoute.jsx
-│   ├── context/
-│   │   ├── AuthContext.jsx
-│   │   ├── AuthContextInstance.js
-│   │   ├── ThemeContext.jsx
-│   │   ├── ThemeContextInstance.js
-│   │   └── useAuth.js
-│   ├── hooks/
-│   │   ├── useAdminStatus.js
-│   │   ├── useJobs.js
-│   │   ├── useTheme.js
-│   │   └── useUserType.js
-│   ├── pages/
-│   │   ├── AboutPage.jsx
-│   │   ├── AccountPage.jsx
-│   │   ├── AdminPage.jsx
-│   │   ├── AuthPage.jsx
-│   │   ├── BlogPage.jsx
-│   │   ├── BlogPostPage.jsx
-│   │   ├── ContactPage.jsx
-│   │   ├── EmailVerificationPage.jsx
-│   │   ├── EmployerDashboard.jsx
-│   │   ├── ForgotPasswordPage.jsx
-│   │   ├── HomePage.jsx
-│   │   ├── JobDetailPage.jsx
-│   │   ├── LandingPage.jsx
-│   │   ├── NotFoundPage.jsx
-│   │   └── SignupPage.jsx
-│   ├── routes/
-│   │   └── index.jsx
-│   ├── services/
-│   │   └── jobs.js
-│   ├── firebase.js
-│   ├── index.css
-│   ├── main.jsx
-│   └── App.jsx
-├── .env
-├── .gitignore
-├── package.json
-├── vite.config.js
-├── vercel.json
-└── README.md
+### For Job Seekers
+- 🔍 **Advanced Job Search** - Filter by location, salary, remote status, tags, and company
+- 💾 **Save Jobs** - Bookmark interesting positions for later review
+- 📊 **Application Tracker** - Monitor application status (Applied → Interview → Offer)
+- 🎯 **Personalized Recommendations** - Based on search history and saved jobs
+
+### For Employers
+- 📝 **Job Posting** - Rich job descriptions with requirements, benefits, and salary
+- 👥 **Application Management** - Review candidates, update statuses, track pipeline
+- 📈 **Analytics Dashboard** - Views, applications, and conversion metrics
+- 🔄 **Bulk Operations** - Manage multiple jobs/applications efficiently
+
+### For Administrators
+- ✅ **Job Moderation** - Approve/reject employer-posted jobs before they go live
+- 👤 **User Management** - Role assignment, account status, user search
+- 📢 **Notifications** - Send platform-wide announcements
+- ⚙️ **Site Settings** - Manage featured tags, branding, and configuration
+
+### Platform-Wide
+- 🌓 **Dark/Light Mode** - System preference detection with manual toggle
+- 📱 **Fully Responsive** - Optimized for mobile, tablet, and desktop
+- ⚡ **Performance Optimized** - Caching layer, lazy loading, code splitting
+- ♿ **Accessible** - Focus management, ARIA labels, reduced motion support
+
+---
+
+## 🔧 Technical Highlights
+
+### Authentication & Authorization
+- Email/password authentication with email verification
+- Role-based access control (seeker/employer/admin)
+- Persistent sessions with secure token refresh
+- Protected route wrapper with role checking
+
+### Job Aggregation System
+```javascript
+// Fetches from 3 external APIs + Firestore employer jobs
+// with 5-minute caching and stale-while-revalidate pattern
+
+fetchAggregatedJobs() → [
+  Arbeitnow API,      // Tech jobs
+  Remotive API,       // Remote jobs  
+  Jobicy API,         // Remote-first companies
+  Firestore           // Employer-posted (approved only)
+] → Deduplicate → Normalize → Cache → Return
 ```
 
-## Getting Started
+### Component Architecture
+- **Atomic Design**: UI primitives → Composed components → Page layouts
+- **Service Layer**: Firebase operations abstracted into reusable services
+- **Custom Hooks**: `useJobs`, `useAuth`, `useAdminStatus`, `useUserType`
+- **Animation System**: Standardized Framer Motion constants for consistent UX
 
-1. **Clone the repository**
-	```bash
-	git clone https://github.com/your-username/my-job-board.git
-	cd my-job-board
-	```
-2. **Install dependencies**
-	```bash
-	npm install
-	```
-3. **Set up Firebase**
-	- Create a Firebase project at [firebase.google.com](https://firebase.google.com/).
-	- Add a web app and copy your config values.
-	- Create a `.env` file in the root directory and add:
-	  ```env
-	  VITE_FIREBASE_API_KEY=your-api-key
-	  VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
-	  VITE_FIREBASE_PROJECT_ID=your-project-id
-	  VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
-	  VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
-	  VITE_FIREBASE_APP_ID=your-app-id
-	  VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
-	  ```
-4. **Start the development server**
-	```bash
-	npm run dev
-	```
-5. **Open in browser**
-	- Visit `http://localhost:5173` (or the port shown in your terminal).
+### Performance Optimizations
+| Optimization | Implementation |
+|-------------|----------------|
+| API Caching | 5-min TTL with localStorage persistence |
+| Code Splitting | Route-based lazy loading |
+| Image Loading | Lazy loading with blur placeholders |
+| Bundle Size | Tree-shaking, minification via Vite |
 
+---
 
-## Usage
+## 🛠 Tech Stack
 
-- **Modern Homepage**: Enjoy a visually improved homepage with testimonials and recommendations.
-- **Consistent Buttons**: All actions use the new Button component for a unified look and feel.
+### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| React | 19.1 | UI framework with hooks |
+| Vite | 7.1 | Build tool & dev server |
+| React Router | 7.8 | Client-side routing |
+| Framer Motion | 12.23 | Animations & transitions |
 
-- **Sign Up / Sign In**: Create an account or log in to access all features.
-- **Search Jobs**: Use the search bar and filters to find jobs.
-- **Save Jobs**: Click "Save" on job cards to bookmark jobs.
-- **Recent Searches**: Your latest search terms appear in the sidebar.
-- **Edit Profile**: Update your account info and change your password.
+### Styling
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Tailwind CSS | 4.1 | Utility-first CSS |
+| DaisyUI | 5.0 | Component library |
+| Headless UI | 2.2 | Accessible primitives |
+| Heroicons | 2.2 | Icon system |
 
-## Environment Variables
+### Backend & Data
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Firebase Auth | 12.1 | Authentication |
+| Cloud Firestore | 12.1 | NoSQL database |
+| Axios | 1.11 | HTTP client |
 
-All sensitive Firebase config values are stored in `.env` and loaded via Vite. Never commit your `.env` file to public repositories.
+---
 
-### Required Environment Variables:
+## 🏗 Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         CLIENT (React SPA)                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Pages          │  Components      │  Services      │  Context   │
+│  ─────────────  │  ──────────────  │  ───────────── │  ──────── │
+│  HomePage       │  ui/             │  jobs.js       │  Auth      │
+│  JobDetailPage  │  layout/         │  savedJobs.js  │  Theme     │
+│  AccountPage    │  admin/          │                │            │
+│  AdminPage      │  employer/       │                │            │
+│  EmployerDash   │  account/        │                │            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      FIREBASE BACKEND                            │
+├─────────────────────────────────────────────────────────────────┤
+│  Authentication          │  Firestore Collections               │
+│  ──────────────────────  │  ─────────────────────────────────── │
+│  • Email/Password        │  users/{uid}                         │
+│  • Email Verification    │    └── savedJobs/{jobSlug}           │
+│  • Password Reset        │    └── applications/{appId}          │
+│                          │  employerJobs/{jobId}                │
+│                          │  adminSettings/{settingId}           │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    EXTERNAL JOB APIs                             │
+├─────────────────────────────────────────────────────────────────┤
+│  Arbeitnow API  │  Remotive API  │  Jobicy API                   │
+│  (Tech Jobs)    │  (Remote Jobs) │  (Remote-First)               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm 10+ or pnpm 8+
+- Firebase project (free tier works)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/TrentonFunt/my-job-board.git
+cd my-job-board
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your Firebase config
+
+# Start development server
+npm run dev
+```
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
@@ -251,73 +219,69 @@ VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
 
-## Deployment
+### Available Scripts
 
-### Vercel Deployment
-1. **Push to GitHub**: Ensure your code is pushed to a GitHub repository
-2. **Connect to Vercel**: Import your repository in Vercel dashboard
-3. **Set Environment Variables**: Add all Firebase config variables in Vercel settings
-4. **Deploy**: Vercel will automatically build and deploy your application
-
-### Build Commands
 ```bash
-# Development
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
-
-# Linting
-npm run lint
+npm run dev      # Start dev server (http://localhost:5173)
+npm run build    # Production build
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
 ```
 
-### Production Features
-- ✅ **Optimized Build**: Vite production build with code splitting
-- ✅ **PWA Ready**: Web app manifest and service worker configuration
-- ✅ **SEO Optimized**: Meta tags, Open Graph, and Twitter Card support
-- ✅ **Favicon Support**: Complete favicon set for all devices and platforms
-- ✅ **Responsive Design**: Optimized for all screen sizes
-- ✅ **Performance**: Optimized bundle size and loading performance
+---
 
-## Tech Stack
+## 📁 Project Structure
 
-- **Frontend**: React 19.1.1, Vite 7.1.2
-- **Styling**: Tailwind CSS 4.1.12, DaisyUI 5.0.50
-- **UI Components**: Headless UI 2.2.8, Heroicons 2.2.0
-- **Animations**: Framer Motion 12.23.14
-- **Backend**: Firebase 12.1.0 (Auth & Firestore)
-- **Routing**: React Router 7.8.1
-- **Utilities**: Day.js 1.11.13, Axios 1.11.0
-- **Notifications**: React Hot Toast 2.6.0
-- **Carousel**: Swiper 11.2.10
-- **Security**: DOMPurify 3.2.6
+```
+src/
+├── components/
+│   ├── ui/                    # Reusable UI components
+│   │   ├── Button.jsx         # Button with variants
+│   │   ├── JobCard.jsx        # Job listing card
+│   │   ├── FilterSidebar.jsx  # Filter modal with focus trap
+│   │   └── Spinner.jsx        # Loading indicator
+│   ├── layout/                # App shell components
+│   ├── admin/                 # Admin panel components
+│   ├── employer/              # Employer dashboard components
+│   └── account/               # User account components
+├── pages/                     # Route-level components
+├── services/                  # API & Firebase services
+│   ├── jobs.js               # Job fetching with caching
+│   └── savedJobs.js          # Saved jobs operations
+├── hooks/                     # Custom React hooks
+├── context/                   # React Context providers
+├── lib/                       # Utilities & constants
+└── routes/                    # Route configuration
+```
 
-## Contributing
+---
 
-Pull requests and suggestions are welcome! Please open an issue for major changes.
+## 📸 Screenshots
 
-## Badges
+<div align="center">
 
-![Vite](https://img.shields.io/badge/vite-7.1.2-blue)
-![React](https://img.shields.io/badge/react-19.1.1-blue)
-![DaisyUI](https://img.shields.io/badge/daisyui-5.0.50-yellow)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-4.1.12-blue)
-![Firebase](https://img.shields.io/badge/firebase-12.1.0-orange)
-![Framer Motion](https://img.shields.io/badge/framer--motion-12.23.14-purple)
+### Home Page - Job Search
+![Home Page](screenshots/homepage.png)
+*Browse and filter jobs from multiple sources with real-time search*
 
+### Employer Dashboard
+![Employer Dashboard](screenshots/employer-dashboard.png)
+*Manage job postings, review applications, and track hiring metrics*
 
-## Screenshots
+</div>
 
-> Update screenshots to reflect the new homepage, testimonials carousel, and button styles for the most accurate preview.
+---
 
-> Replace these with your own screenshots in the `screenshots/` folder.
+## 📄 License
 
-![Homepage](screenshots/homepage.png)
-![Account Page](screenshots/account.png)
+This project is open source and available under the [MIT License](LICENSE).
 
-## License
+---
 
-MIT
+<div align="center">
+
+**Built with ❤️ using React, Firebase, and Tailwind CSS**
+
+[⬆ Back to Top](#-role-rocket)
+
+</div>
