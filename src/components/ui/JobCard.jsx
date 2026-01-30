@@ -1,30 +1,79 @@
-import { Link } from "react-router";
-import Button from "./Button";
+/**
+ * JobCard - Main job listing card component
+ * Displays job information with save and apply functionality
+ * 
+ * Features:
+ * - Consistent card sizing regardless of content
+ * - Animated hover states
+ * - Save/unsave jobs
+ * - Quick apply tracking
+ */
+
 import { useState, useEffect } from "react";
 import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { MapPinIcon, CurrencyDollarIcon, TagIcon, BookmarkIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
-import { motion as Motion, AnimatePresence } from "framer-motion";
+import { MapPinIcon, CurrencyDollarIcon, TagIcon } from "@heroicons/react/24/outline";
+import { motion as Motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { isJobSaved, toggleSaveJob, trackApplication } from "../../services/savedJobs";
 
+// Sub-components
+import JobCardHeader from "./JobCardHeader";
+import JobCardBadge from "./JobCardBadge";
+import JobCardActions from "./JobCardActions";
+import JobCardSaveButton from "./JobCardSaveButton";
+
+/**
+ * Strip HTML tags from a string
+ * @param {string} html - HTML string to strip
+ * @returns {string} Plain text
+ */
 function stripHTML(html) {
+  if (!html) return "";
   return html.replace(/<[^>]+>/g, "");
 }
 
-export default function JobCard({ title, company, description, slug, location, salary, tags = [], url, source }) {
+/**
+ * Truncate text to a maximum length with ellipsis
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Maximum character length
+ * @returns {string} Truncated text
+ */
+function truncateText(text, maxLength = 100) {
+  if (!text) return "";
+  const stripped = stripHTML(text);
+  if (stripped.length <= maxLength) return stripped;
+  return stripped.slice(0, maxLength).trim() + "...";
+}
+
+// Card height constant for consistency
+const CARD_HEIGHT = "h-[340px]";
+const DESCRIPTION_LENGTH = 100;
+
+export default function JobCard({ 
+  title, 
+  company, 
+  description, 
+  slug, 
+  location, 
+  salary, 
+  tags = [], 
+  url, 
+  source 
+}) {
   const [saved, setSaved] = useState(false);
   const [user, setUser] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
 
+  // Auth listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
     return () => unsubscribe();
   }, []);
 
+  // Check saved status
   useEffect(() => {
     async function checkSaved() {
       if (!user) {
@@ -37,6 +86,9 @@ export default function JobCard({ title, company, description, slug, location, s
     checkSaved();
   }, [slug, user]);
 
+  /**
+   * Handle save/unsave job
+   */
   const handleSave = async () => {
     if (!user) {
       toast.error("Please sign in to save jobs");
@@ -62,6 +114,9 @@ export default function JobCard({ title, company, description, slug, location, s
     }
   };
 
+  /**
+   * Handle quick apply - tracks application
+   */
   const handleQuickApply = async () => {
     if (!user) {
       toast.error("Please sign in to track applications");
@@ -71,10 +126,10 @@ export default function JobCard({ title, company, description, slug, location, s
     setIsApplying(true);
     try {
       const applicationData = {
-        company: company,
+        company,
         position: title,
-        location: location,
-        salary: salary,
+        location,
+        salary,
         jobUrl: url,
         appliedDate: new Date(),
         status: "APPLIED",
@@ -96,6 +151,9 @@ export default function JobCard({ title, company, description, slug, location, s
     }
   };
 
+  // Job data object for actions component
+  const jobData = { slug, title, company, description, location, salary, tags, url, source };
+
   return (
     <Motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -109,204 +167,76 @@ export default function JobCard({ title, company, description, slug, location, s
       whileTap={{ scale: 0.98 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="card bg-base-100 border border-base-300 p-6 w-full group cursor-pointer relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+      className={`card bg-base-100 border border-base-300 p-6 w-full ${CARD_HEIGHT} flex flex-col group cursor-pointer relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300`}
       tabIndex={0}
     >
       {/* Animated background gradient */}
       <Motion.div
-        className="absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0"
+        className="absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 pointer-events-none"
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
       />
       
-      {/* Save button - floating */}
-      <Motion.button
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ 
-          scale: isHovered ? 1 : 0, 
-          opacity: isHovered ? 1 : 0 
-        }}
-        transition={{ duration: 0.2, delay: 0.1 }}
+      {/* Floating save button */}
+      <JobCardSaveButton 
+        saved={saved}
+        isVisible={isHovered}
+        isLoading={isLoading}
         onClick={handleSave}
-        disabled={isLoading}
-        className="absolute top-4 right-4 z-10 p-2 rounded-full bg-base-100 shadow-lg border border-base-200 hover:shadow-xl transition-all duration-200"
-      >
-        <AnimatePresence mode="wait">
-          {saved ? (
-            <Motion.div
-              key="saved"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: 180 }}
-              transition={{ duration: 0.2 }}
-            >
-              <BookmarkSolidIcon className="w-5 h-5 text-accent" />
-            </Motion.div>
-          ) : (
-            <Motion.div
-              key="unsaved"
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: 180 }}
-              transition={{ duration: 0.2 }}
-            >
-              <BookmarkIcon className="w-5 h-5 text-base-content/60" />
-            </Motion.div>
-          )}
-        </AnimatePresence>
-      </Motion.button>
+      />
 
-      <div className="relative z-10">
-        {/* Header with animated title */}
-        <Motion.div 
-          className="flex items-start justify-between gap-3 mb-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
-        >
-          <div className="flex-1">
-            <Motion.h2 
-              className="card-title text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-300"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              {title}
-            </Motion.h2>
-            <Motion.p 
-              className="text-sm text-base-content/70 mt-1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {company}
-            </Motion.p>
-          </div>
-        </Motion.div>
+      {/* Card content */}
+      <div className="relative z-10 flex flex-col flex-1">
+        {/* Header - Title & Company */}
+        <JobCardHeader title={title} company={company} />
 
-        {/* Job details with staggered animation */}
+        {/* Job metadata badges */}
         <Motion.div 
-          className="flex flex-wrap gap-3 items-center mb-4"
+          className="flex flex-wrap gap-2 items-center mb-3 min-h-[28px]"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
           {location && (
-            <Motion.span 
-              className="flex items-center gap-1 text-xs text-base-content/70 bg-base-200 px-2 py-1 rounded-full"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            >
-              <MapPinIcon className="w-3 h-3 text-primary" />
-              {location}
-            </Motion.span>
+            <JobCardBadge icon={<MapPinIcon className="w-3 h-3" />}>
+              <span className="truncate max-w-[120px]">{location}</span>
+            </JobCardBadge>
           )}
-          {typeof salary !== 'undefined' && salary !== null && salary !== '' && (
-            <Motion.span 
-              className="flex items-center gap-1 text-xs text-base-content/70 bg-base-200 px-2 py-1 rounded-full"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            >
-              <CurrencyDollarIcon className="w-3 h-3 text-primary" />
+          {salary != null && salary !== '' && (
+            <JobCardBadge icon={<CurrencyDollarIcon className="w-3 h-3" />}>
               {salary}
-            </Motion.span>
+            </JobCardBadge>
           )}
-          {tags && tags.length > 0 && (
-            <Motion.span 
-              className="flex items-center gap-1 text-xs text-base-content/70 bg-base-200 px-2 py-1 rounded-full"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            >
-              <TagIcon className="w-3 h-3 text-primary" />
+          {tags?.length > 0 && (
+            <JobCardBadge icon={<TagIcon className="w-3 h-3" />}>
               {tags.slice(0, 2).join(', ')}
               {tags.length > 2 && <span className="ml-1">+{tags.length - 2}</span>}
-            </Motion.span>
+            </JobCardBadge>
           )}
         </Motion.div>
 
-        {/* Description with fade in */}
+        {/* Description - fixed height for consistency */}
         <Motion.p 
-          className="text-sm text-base-content/80 mb-4 leading-relaxed"
+          className="text-sm text-base-content/80 leading-relaxed line-clamp-3 flex-shrink-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          {stripHTML(description).slice(0, 120)}...
+          {truncateText(description, DESCRIPTION_LENGTH)}
         </Motion.p>
 
-        {/* Action buttons with enhanced animations */}
-        <Motion.div 
-          className="flex flex-col gap-2"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Link to={`/job/${slug}`} state={{ job: { slug, title, company_name: company, description, location, salary, tags, url, source } }}>
-            <Motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Button className="w-full btn btn-primary shadow-lg hover:shadow-xl transition-all duration-200 text-sm">
-                View Details
-              </Button>
-            </Motion.div>
-          </Link>
-          
-          <div className="flex gap-2">
-            <Motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1"
-            >
-              <Button
-                className="w-full btn btn-secondary shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-1 text-sm"
-                onClick={handleQuickApply}
-                disabled={isApplying}
-              >
-                {isApplying ? (
-                  <Motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
-                  />
-                ) : (
-                  <>
-                    <PaperAirplaneIcon className="w-4 h-4" />
-                    <span>Apply</span>
-                  </>
-                )}
-              </Button>
-            </Motion.div>
-            
-            <Motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              className="flex-1"
-            >
-              <Button
-                className={`w-full btn transition-all duration-200 text-sm ${
-                  saved 
-                    ? "btn-primary" 
-                    : "btn-outline btn-primary"
-                }`}
-                onClick={handleSave}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
-                  />
-                ) : (
-                  saved ? "Saved" : "Save"
-                )}
-              </Button>
-            </Motion.div>
-          </div>
-        </Motion.div>
+        {/* Spacer to push actions to bottom */}
+        <div className="flex-1 min-h-2" />
+
+        {/* Action buttons - always at bottom */}
+        <JobCardActions
+          job={jobData}
+          saved={saved}
+          isLoading={isLoading}
+          isApplying={isApplying}
+          onSave={handleSave}
+          onApply={handleQuickApply}
+        />
       </div>
     </Motion.div>
   );
