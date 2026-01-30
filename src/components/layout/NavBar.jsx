@@ -128,17 +128,28 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
             <ThemeToggle />
           </Motion.div>
           
-          {/* Sign Up Button for non-authenticated users */}
+          {/* Sign In & Sign Up Buttons for non-authenticated users */}
           {!user && (
-            <Motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4, duration: 0.3 }}
-            >
-              <Link to="/signup" className="btn btn-primary rounded-btn text-base font-semibold ml-2 transition-all duration-200">
-                Sign Up
-              </Link>
-            </Motion.div>
+            <>
+              <Motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+              >
+                <Link to="/auth" className="btn btn-ghost rounded-btn text-base font-medium hover:bg-emerald-500/10 hover:text-emerald-400 transition-all duration-200">
+                  Sign In
+                </Link>
+              </Motion.div>
+              <Motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, duration: 0.3 }}
+              >
+                <Link to="/signup" className="btn btn-primary rounded-btn text-base font-semibold transition-all duration-200">
+                  Sign Up
+                </Link>
+              </Motion.div>
+            </>
           )}
           
           {/* User Dropdown for authenticated users */}
@@ -325,24 +336,42 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
                   </>
                 )}
                 
-                {/* Sign Up for non-authenticated users */}
+                {/* Sign In & Sign Up for non-authenticated users */}
                 {!user && (
-                  <MenuItem>
-                    {({ focus }) => (
-                      <Motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        <Link 
-                          to="/signup" 
-                          className={`btn btn-primary w-full justify-start transition-all duration-200 ${focus ? 'bg-primary-focus' : ''}`}
+                  <>
+                    <MenuItem>
+                      {({ focus }) => (
+                        <Motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 }}
                         >
-                          Sign Up
-                        </Link>
-                      </Motion.div>
-                    )}
-                  </MenuItem>
+                          <Link 
+                            to="/auth" 
+                            className={`btn btn-ghost w-full justify-start transition-all duration-200 ${focus ? 'bg-primary/10 text-primary' : ''}`}
+                          >
+                            Sign In
+                          </Link>
+                        </Motion.div>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ focus }) => (
+                        <Motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.35 }}
+                        >
+                          <Link 
+                            to="/signup" 
+                            className={`btn btn-primary w-full justify-start transition-all duration-200 ${focus ? 'bg-primary-focus' : ''}`}
+                          >
+                            Sign Up
+                          </Link>
+                        </Motion.div>
+                      )}
+                    </MenuItem>
+                  </>
                 )}
               </Motion.div>
             </MenuItems>
