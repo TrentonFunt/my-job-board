@@ -7,9 +7,11 @@ import AdminNotifications from "./AdminNotifications";
 import AdminSettings from "./AdminSettings";
 import AdminFeedbackSupport from "./AdminFeedbackSupport";
 import AdminJobsPanel from "./AdminJobsPanel";
+import AdminJobModeration from "./AdminJobModeration";
 
 const MENU = [
   { key: "users", label: "User Management" },
+  { key: "moderation", label: "Job Moderation" },
   { key: "jobs", label: "Jobs Panel" },
   { key: "analytics", label: "Job Analytics" },
   { key: "notifications", label: "Notifications" },
@@ -61,6 +63,7 @@ export default function AdminPanelLayout() {
           transition={{ duration: 0.3 }}
         >
           {active === "users" && <AdminUserManagement />}
+          {active === "moderation" && <AdminJobModeration />}
           {active === "jobs" && <AdminJobsPanel />}
           {active === "analytics" && <AdminJobAnalytics />}
           {active === "notifications" && <AdminNotifications />}

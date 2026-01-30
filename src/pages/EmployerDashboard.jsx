@@ -170,10 +170,10 @@ export default function EmployerDashboard() {
         employerId: user.uid,
         employerName: userData?.companyName || user.displayName,
         createdAt: new Date().toISOString(),
-        status: "active",
+        status: "pending", // Jobs require admin approval before going live
         applicationsCount: 0,
         source: "employer",
-        slug: newJob.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        slug: newJob.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now()
       });
       resetJobForm();
       setShowJobForm(false);

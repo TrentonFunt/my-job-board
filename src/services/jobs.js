@@ -8,8 +8,11 @@
  * @property {number|string|null} [salary] - Salary information
  * @property {string[]} [tags] - Job tags/skills
  * @property {string} [url] - External application URL
- * @property {string} [source] - API source (arbeitnow, remotive, jobicy)
+ * @property {string} [source] - API source (arbeitnow, remotive, jobicy, employer)
  */
+
+import { db } from "../firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 // ============================================================================
 // CACHING LAYER - Improves performance by reducing API calls
@@ -145,6 +148,26 @@ const normalizeJobicy = (list = []) => list.map((j) => ({
 }));
 
 /**
+ * Normalize employer-posted jobs from Firestore to Job format
+ * @param {Array} list - Raw employer jobs from Firestore
+ * @returns {Job[]}
+ */
+const normalizeEmployerJobs = (list = []) => list.map((j) => ({
+  source: 'employer',
+  slug: j.slug ?? `employer-${j.id}`,
+  title: j.title ?? '',
+  company_name: j.company || j.employerName || '',
+  description: j.description ?? '',
+  location: j.location ?? 'Remote',
+  salary: j.salary ?? null,
+  tags: Array.isArray(j.tags) ? j.tags : [],
+  url: j.applicationUrl ?? '',
+  type: j.type ?? 'Full-time',
+  employerId: j.employerId,
+  createdAt: j.createdAt,
+}));
+
+/**
  * Remove duplicate jobs by slug
  * @param {Job[]} jobs - Array of jobs
  * @returns {Job[]}
@@ -159,6 +182,28 @@ const dedupeBySlug = (jobs) => {
 // ============================================================================
 
 /**
+ * Fetch approved employer jobs from Firestore
+ * @returns {Promise<Job[]>}
+ */
+async function fetchApprovedEmployerJobs() {
+  try {
+    const q = query(
+      collection(db, "employerJobs"),
+      where("status", "==", "approved")
+    );
+    const snapshot = await getDocs(q);
+    const jobs = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return normalizeEmployerJobs(jobs);
+  } catch (error) {
+    console.warn('Failed to fetch employer jobs:', error);
+    return [];
+  }
+}
+
+/**
  * Fetch jobs directly from all API sources (browser-side)
  * @param {AbortSignal} [signal] - Abort signal for cancellation
  * @returns {Promise<Job[]>}
@@ -171,7 +216,8 @@ async function fetchFromAllSources(signal) {
   const effectiveSignal = signal || controller.signal;
   
   try {
-    const [arbeitnowRes, remotiveRes, jobicyRes] = await Promise.allSettled([
+    // Fetch from external APIs and Firestore in parallel
+    const [arbeitnowRes, remotiveRes, jobicyRes, employerJobs] = await Promise.allSettled([
       fetch('/api/job-board-api', { 
         headers: { accept: 'application/json' }, 
         signal: effectiveSignal 
@@ -184,6 +230,7 @@ async function fetchFromAllSources(signal) {
         headers: { accept: 'application/json' }, 
         signal: effectiveSignal 
       }),
+      fetchApprovedEmployerJobs(),
     ]);
 
     const arbeitnowData = arbeitnowRes.status === 'fulfilled' && arbeitnowRes.value.ok 
@@ -195,8 +242,13 @@ async function fetchFromAllSources(signal) {
     const jobicyData = jobicyRes.status === 'fulfilled' && jobicyRes.value.ok 
       ? await jobicyRes.value.json() 
       : { jobs: [] };
+    const employerJobsData = employerJobs.status === 'fulfilled' 
+      ? employerJobs.value 
+      : [];
 
+    // Employer jobs appear first (prioritized), then external API jobs
     return dedupeBySlug([
+      ...employerJobsData,
       ...normalizeArbeitnow(arbeitnowData.data || []),
       ...normalizeRemotive(remotiveData.jobs || []),
       ...normalizeJobicy(jobicyData.jobs || jobicyData.data || []),

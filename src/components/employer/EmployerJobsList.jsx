@@ -3,9 +3,42 @@ import {
   BriefcaseIcon,
   EyeIcon,
   PencilIcon,
-  TrashIcon
+  TrashIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  XCircleIcon
 } from "@heroicons/react/24/outline";
 import Button from "../ui/Button";
+
+/**
+ * Get status badge styling and icon for job status
+ * @param {string} status - Job status (pending, approved, rejected)
+ * @returns {{ className: string, icon: JSX.Element, label: string }}
+ */
+function getStatusBadgeInfo(status) {
+  switch (status) {
+    case "approved":
+    case "active":
+      return {
+        className: "bg-success/20 text-success",
+        icon: <CheckCircleIcon className="w-3 h-3" />,
+        label: "Live"
+      };
+    case "rejected":
+      return {
+        className: "bg-error/20 text-error",
+        icon: <XCircleIcon className="w-3 h-3" />,
+        label: "Rejected"
+      };
+    case "pending":
+    default:
+      return {
+        className: "bg-warning/20 text-warning",
+        icon: <ClockIcon className="w-3 h-3" />,
+        label: "Pending Review"
+      };
+  }
+}
 
 /**
  * Jobs list tab for Employer Dashboard
@@ -97,7 +130,19 @@ export default function EmployerJobsList({
                   className="checkbox checkbox-primary mt-1 flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-semibold text-base-content mb-2 truncate">{job.title}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg sm:text-xl font-semibold text-base-content truncate">{job.title}</h3>
+                    {/* Job Status Badge */}
+                    {(() => {
+                      const statusInfo = getStatusBadgeInfo(job.status);
+                      return (
+                        <span className={`badge badge-sm gap-1 flex-shrink-0 ${statusInfo.className}`}>
+                          {statusInfo.icon}
+                          {statusInfo.label}
+                        </span>
+                      );
+                    })()}
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-base-content/60 text-sm mb-4">
                     <span className="flex items-center gap-1">
                       <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></span>
