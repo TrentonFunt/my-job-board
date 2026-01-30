@@ -1,11 +1,10 @@
-
 import Navbar from "./NavBar";
 import { Outlet, useLocation, Navigate } from "react-router";
 import Footer from "./Footer";
 import { useAuth } from "../../context/useAuth";
 import BackToTopButton from "../ui/BackToTopButton";
 
-// List of public routes
+// List of public routes (accessible without login)
 const PUBLIC_PATHS = [
   "/",
   "/about",
@@ -17,23 +16,45 @@ const PUBLIC_PATHS = [
   "/404"
 ];
 
+// Pages where footer should be hidden (focused flows & dashboards)
+const HIDE_FOOTER_PATHS = [
+  "/auth",
+  "/signup",
+  "/email-verification",
+  "/admin",
+  "/employer-dashboard",
+  "/account"
+];
+
+/**
+ * Determines if footer should be shown based on current path
+ * @param {string} pathname - Current route path
+ * @returns {boolean}
+ */
+function shouldShowFooter(pathname) {
+  return !HIDE_FOOTER_PATHS.some(path => 
+    pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
+
 export default function Layout() {
   const { user, loading } = useAuth();
   const location = useLocation();
+  const showFooter = shouldShowFooter(location.pathname);
 
   // If not loading and not authenticated
   if (!loading && !user) {
     // Allow public pages
-    if (PUBLIC_PATHS.includes(location.pathname)) {
+    if (PUBLIC_PATHS.includes(location.pathname) || location.pathname.startsWith("/blog/")) {
       return (
-        <div className="flex flex-col min-h-screen bg-slate-900">
+        <div className="flex flex-col min-h-screen bg-base-100">
           <Navbar />
           <main className="flex-1">
             <div className="w-full">
               <Outlet />
             </div>
           </main>
-          <Footer />
+          {showFooter && <Footer />}
           <BackToTopButton />
         </div>
       );
@@ -48,14 +69,14 @@ export default function Layout() {
 
   // Authenticated or loading
   return (
-    <div className="flex flex-col min-h-screen bg-slate-900">
+    <div className="flex flex-col min-h-screen bg-base-100">
       <Navbar />
       <main className="flex-1">
         <div className="w-full">
           <Outlet />
         </div>
       </main>
-      <Footer />
+      {showFooter && <Footer />}
       <BackToTopButton />
     </div>
   );
