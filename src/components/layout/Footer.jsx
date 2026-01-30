@@ -16,7 +16,6 @@ export default function Footer() {
       links: [
         { to: "/about", label: "About Us" },
         { to: "/contact", label: "Contact" },
-        { to: "/careers", label: "Careers" },
         { to: "/blog", label: "Blog" }
       ]
     },
@@ -25,26 +24,21 @@ export default function Footer() {
       links: [
         { to: "/jobs", label: "Browse Jobs" },
         { to: "/signup", label: "Create Account" },
-        { to: "/account", label: "My Account" },
-        { to: "/help", label: "Help Center" }
+        { to: "/account", label: "My Account" }
       ]
     },
     {
       title: "For Employers",
       links: [
-        { to: "/employers", label: "Post Jobs" },
-        { to: "/pricing", label: "Pricing" },
-        { to: "/solutions", label: "Solutions" },
-        { to: "/recruiters", label: "For Recruiters" }
+        { to: "/signup", label: "Post Jobs" },
+        { to: "/employer-dashboard", label: "Employer Dashboard" }
       ]
     },
     {
-      title: "Resources",
+      title: "Legal",
       links: [
-        { to: "/privacy", label: "Privacy Policy" },
-        { to: "/terms", label: "Terms of Service" },
-        { to: "/cookies", label: "Cookie Policy" },
-        { to: "/accessibility", label: "Accessibility" }
+        { to: "/about", label: "Privacy Policy" },
+        { to: "/about", label: "Terms of Service" }
       ]
     }
   ];
