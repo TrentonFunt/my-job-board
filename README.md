@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 Role Rocket
+# Role Rocket
 
 ### A Modern Full-Stack Job Board Platform
 
@@ -30,7 +30,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 Role Rocket is a comprehensive job board platform designed to serve three distinct user types:
 
@@ -49,35 +49,35 @@ Role Rocket is a comprehensive job board platform designed to serve three distin
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### For Job Seekers
-- 🔍 **Advanced Job Search** - Filter by location, salary, remote status, tags, and company
-- 💾 **Save Jobs** - Bookmark interesting positions for later review
-- 📊 **Application Tracker** - Monitor application status (Applied → Interview → Offer)
-- 🎯 **Personalized Recommendations** - Based on search history and saved jobs
+- **Advanced Job Search** - Filter by location, salary, remote status, tags, and company
+- **Save Jobs** - Bookmark interesting positions for later review
+- **Application Tracker** - Monitor application status (Applied → Interview → Offer)
+- **Personalized Recommendations** - Based on search history and saved jobs
 
 ### For Employers
-- 📝 **Job Posting** - Rich job descriptions with requirements, benefits, and salary
-- 👥 **Application Management** - Review candidates, update statuses, track pipeline
-- 📈 **Analytics Dashboard** - Views, applications, and conversion metrics
-- 🔄 **Bulk Operations** - Manage multiple jobs/applications efficiently
+- **Job Posting** - Rich job descriptions with requirements, benefits, and salary
+- **Application Management** - Review candidates, update statuses, track pipeline
+- **Analytics Dashboard** - Views, applications, and conversion metrics
+- **Bulk Operations** - Manage multiple jobs/applications efficiently
 
 ### For Administrators
-- ✅ **Job Moderation** - Approve/reject employer-posted jobs before they go live
-- 👤 **User Management** - Role assignment, account status, user search
-- 📢 **Notifications** - Send platform-wide announcements
-- ⚙️ **Site Settings** - Manage featured tags, branding, and configuration
+- **Job Moderation** - Approve/reject employer-posted jobs before they go live
+- **User Management** - Role assignment, account status, user search
+- **Notifications** - Send platform-wide announcements
+- **Site Settings** - Manage featured tags, branding, and configuration
 
 ### Platform-Wide
-- 🌓 **Dark/Light Mode** - System preference detection with manual toggle
-- 📱 **Fully Responsive** - Optimized for mobile, tablet, and desktop
-- ⚡ **Performance Optimized** - Caching layer, lazy loading, code splitting
-- ♿ **Accessible** - Focus management, ARIA labels, reduced motion support
+- **Dark/Light Mode** - System preference detection with manual toggle
+- **Fully Responsive** - Optimized for mobile, tablet, and desktop
+- **Performance Optimized** - Caching layer, lazy loading, code splitting
+- **Accessible** - Focus management, ARIA labels, reduced motion support
 
 ---
 
-## 🔧 Technical Highlights
+## Technical Highlights
 
 ### Authentication & Authorization
 - Email/password authentication with email verification
@@ -114,7 +114,7 @@ fetchAggregatedJobs() → [
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 | Technology | Version | Purpose |
@@ -141,7 +141,7 @@ fetchAggregatedJobs() → [
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -180,7 +180,7 @@ fetchAggregatedJobs() → [
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
@@ -230,7 +230,7 @@ npm run lint     # Run ESLint
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -256,7 +256,7 @@ src/
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <div align="center">
 
@@ -272,7 +272,7 @@ src/
 
 ---
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
